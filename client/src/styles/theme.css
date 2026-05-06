@@ -1,0 +1,19 @@
+:root {
+  --background: #050505;
+  --card: #0a0a0a;
+  --secondary: #1a1a1a;
+  --accent: #ff1a1a;
+  --text: #ffffff;
+  --muted: #9ca3af;
+  --line: rgba(255, 255, 255, 0.08);
+  --glow-red: rgba(255, 0, 0, 0.5);
+}
+
+.focus-ring {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+}
+
+.focus-ring:focus-visible {
+  outline-color: rgba(255, 26, 26, 0.85);
+}

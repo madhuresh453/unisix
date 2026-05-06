@@ -1,0 +1,47 @@
+import http from "http";
+import { Server } from "socket.io";
+import app from "./src/app.js";
+import { connectDB } from "./src/config/db.js";
+import { assertProductionSecrets, env } from "./src/config/env.js";
+import { setIO } from "./src/config/socket.js";
+import { startCleanupJob } from "./src/jobs/cleanupJob.js";
+import { startEmailJob } from "./src/jobs/emailJob.js";
+import { startLeaderboardJob } from "./src/jobs/leaderboardJob.js";
+import { registerNotificationSocket } from "./src/sockets/notifications.js";
+import { registerScoreboardSocket } from "./src/sockets/scoreboard.js";
+
+assertProductionSecrets();
+
+const server = http.createServer(app);
+const io = new Server(server, {
+  cors: {
+    origin: env.clientUrl,
+    credentials: true
+  }
+});
+
+setIO(io);
+
+io.on("connection", (socket) => {
+  registerScoreboardSocket(io, socket);
+  registerNotificationSocket(io, socket);
+});
+
+async function bootstrap() {
+  await connectDB();
+
+  if (env.nodeEnv !== "test") {
+    startLeaderboardJob();
+    startCleanupJob();
+    startEmailJob();
+  }
+
+  server.listen(env.port, () => {
+    console.log(`UNI6CTF API listening on http://localhost:${env.port}`);
+  });
+}
+
+bootstrap().catch((error) => {
+  console.error("Failed to boot UNI6CTF API", error);
+  process.exit(1);
+});

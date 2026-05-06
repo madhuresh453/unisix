@@ -1,0 +1,36 @@
+@keyframes glitch {
+  0%, 100% {
+    text-shadow: 0 0 0 rgba(255, 0, 51, 0);
+    transform: translate(0);
+  }
+  8% {
+    text-shadow: 3px 0 0 rgba(255, 0, 51, 0.8), -3px 0 0 rgba(255,255,255,0.55);
+    transform: translate(1px, -1px);
+  }
+  10% {
+    text-shadow: -2px 0 0 rgba(255, 0, 51, 0.8), 2px 0 0 rgba(255,255,255,0.45);
+    transform: translate(-1px, 1px);
+  }
+  13% {
+    text-shadow: none;
+    transform: translate(0);
+  }
+}
+
+@keyframes scan {
+  0% {
+    transform: translateY(-120%);
+  }
+  100% {
+    transform: translateY(120%);
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 24px rgba(255, 0, 51, 0.16);
+  }
+  50% {
+    box-shadow: 0 0 42px rgba(255, 0, 51, 0.36);
+  }
+}

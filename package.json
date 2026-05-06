@@ -1,0 +1,30 @@
+{
+  "name": "uni6ctf",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "UNI6CTF cybersecurity platform monorepo.",
+  "workspaces": [
+    "client",
+    "server"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev -w server\" \"npm run dev -w client\"",
+    "dev:client": "npm run dev -w client",
+    "dev:server": "npm run dev -w server",
+    "build": "npm run build -w client",
+    "start": "npm run start -w server",
+    "seed": "node database/seed/index.js",
+    "lint": "npm run lint -w client"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
+  },
+  "dependencies": {
+    "@fontsource/teko": "^5.2.7"
+  }
+}
