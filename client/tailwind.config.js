@@ -29,9 +29,10 @@ module.exports = {
         "glow-card": "0 0 25px rgba(255,0,0,0.35)",
         soft: "0 18px 80px rgba(0,0,0,0.45)"
       },
-        fontFamily: {
+      fontFamily: {
         sans: ["var(--font-inter)", "Inter", "system-ui", "sans-serif"],
         display: ["var(--font-poppins)", "Poppins", "Inter", "system-ui", "sans-serif"],
+        teko: ["var(--font-teko)", "Teko", "sans-serif"],
         cyber: ["Orbitron", "var(--font-poppins)", "Poppins", "monospace"]
       },
         backgroundImage: {

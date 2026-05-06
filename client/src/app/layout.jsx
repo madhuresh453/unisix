@@ -1,5 +1,5 @@
 import "@/styles/globals.css";
-import { Inter, Poppins } from "next/font/google";
+import { Inter, Poppins, Teko } from "next/font/google";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
 import { Providers } from "@/context/Providers";
@@ -17,6 +17,13 @@ const poppins = Poppins({
   display: "swap"
 });
 
+const teko = Teko({
+  subsets: ["latin"],
+  weight: ["500", "600", "700"],
+  variable: "--font-teko",
+  display: "swap"
+});
+
 export const metadata = {
   title: "UNI6CTF | Hack. Learn. Compete. Grow.",
   description:
@@ -25,7 +32,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`${inter.variable} ${poppins.variable}`}>
+    <html lang="en" className={`${inter.variable} ${poppins.variable} ${teko.variable}`}>
       <body>
         <Providers>
           <Navbar />
