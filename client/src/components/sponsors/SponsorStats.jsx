@@ -1,10 +1,10 @@
 import { Award, Globe2, Layers, Sparkles } from "lucide-react";
 
 const stats = [
-  { value: "25+", label: "Sponsors", icon: Award },
-  { value: "10+", label: "Partners", icon: Layers },
-  { value: "40+", label: "Countries Reached", icon: Globe2 },
-  { value: "100+", label: "Events Supported", icon: Sparkles }
+  { value: "4+", label: "Sponsors", icon: Award },
+  { value: "7+", label: "Partners", icon: Layers },
+  { value: "15+", label: "Countries Reached", icon: Globe2 },
+  { value: "5+", label: "Events Supported", icon: Sparkles }
 ];
 
 export function SponsorStats() {

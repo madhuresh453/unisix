@@ -1,11 +1,11 @@
 import { CalendarDays, Code2, Globe2, ShieldCheck, Users } from "lucide-react";
 
 const stats = [
-  { label: "Team Members", value: "50+", icon: Users },
-  { label: "Developers", value: "20+", icon: Code2 },
-  { label: "Security Researchers", value: "15+", icon: ShieldCheck },
-  { label: "Events Organized", value: "100+", icon: CalendarDays },
-  { label: "Countries Reached", value: "25+", icon: Globe2 }
+  { label: "Team Members", value: "10+", icon: Users },
+  { label: "Developers", value: "2+", icon: Code2 },
+  { label: "Security Researchers", value: "3+", icon: ShieldCheck },
+  { label: "Events Organized", value: "4+", icon: CalendarDays },
+  { label: "Countries Reached", value: "15+", icon: Globe2 }
 ];
 
 export function TeamStats() {

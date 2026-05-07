@@ -12,7 +12,7 @@ import { events } from "@/utils/constants";
 import { formatDateTime } from "@/utils/formatters";
 
 const scoreboard = [
-  { rank: 1, team: "Ethereal Hackers", score: 9850 },
+  { rank: 1, team: "PBKS", score: 9850 },
   { rank: 2, team: "Cypher Knights", score: 8720 },
   { rank: 3, team: "The Exploiters", score: 7410 },
   { rank: 4, team: "pwn4fun", score: 6120 },
@@ -21,33 +21,33 @@ const scoreboard = [
 
 const upcomingCards = [
   {
-    id: "kernel-panic-finals",
-    month: "JUN",
-    day: "22",
-    title: "Web Warriors CTF 2026",
-    copy: "Dive into web exploitation challenges and test your hacking skills.",
+    id: "CTF4-Turkey",
+    month: "MAY",
+    day: "15",
+    title: "CTF4 CYBER CHALLENGE",
+    copy: "Dive into Capture The Flag challenges and test your hacking skills.",
     duration: "24 Hours",
-    players: "800+ Players",
-    difficulty: "Hard"
+    players: "200+ Players",
+    difficulty: "Med-Hard"
   },
   {
-    id: "quantum-siege",
-    month: "JUL",
-    day: "06",
-    title: "CryptoCon CTF 2026",
+    id: "UNI6CTF ONLINE WARZONE",
+    month: "DECEMBER",
+    day: "15",
+    title: "UNI6CTF ONLINE WARZONE",
     copy: "Break the ciphers. Decode, decrypt and conquer.",
     duration: "48 Hours",
     players: "1000+ Players",
-    difficulty: "Hard"
+    difficulty: "MED"
   },
   {
-    id: "rookie-breach",
-    month: "AUG",
-    day: "17",
-    title: "UNI6 Beginner Quest",
+    id: "UNI6CTF 2.0",
+    month: "SOON",
+    day: "SOON",
+    title: "UNI6CTF 2.0",
     copy: "Perfect for newcomers. Learn practical CTF workflows fast.",
     duration: "24 Hours",
-    players: "500+ Players",
+    players: "1000+ Teams",
     difficulty: "Medium"
   }
 ];
@@ -115,12 +115,12 @@ export default function CTFPage() {
                     </div>
                     <div className="p-6 md:p-8">
                       <span className="inline-flex rounded-md bg-[#0e2f17] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#6dff91]">Live</span>
-                      <h2 className="mt-3 font-teko text-6xl uppercase leading-[0.85] tracking-[0.01em] text-white">UNI6CTF 2026 Finals</h2>
-                      <p className="mt-3 text-white/75">The ultimate battle is live. Prove your skills, exploit vulnerabilities, and capture the flags.</p>
+                      <h2 className="mt-3 font-teko text-6xl uppercase leading-[0.85] tracking-[0.01em] text-white">UNI6CTF GLOBAL</h2>
+                      <p className="mt-3 text-white/75">ONLINE </p>
                       <div className="mt-6 grid gap-3 text-sm text-white/70 sm:grid-cols-3">
-                        <span className="flex items-center gap-2"><Calendar className="h-4 w-4 text-[#ff1f45]" /> {formatDateTime(liveEvent.startsAt)}</span>
-                        <span className="flex items-center gap-2"><Clock3 className="h-4 w-4 text-[#ff1f45]" /> 48 Hours</span>
-                        <span className="flex items-center gap-2"><Users className="h-4 w-4 text-[#ff1f45]" /> 1,842 Players</span>
+                        <span className="flex items-center gap-2"><Calendar className="h-4 w-4 text-[#ff1f45]" /> Live</span>
+                        <span className="flex items-center gap-2"><Clock3 className="h-4 w-4 text-[#ff1f45]" /> 24/7 Hours</span>
+                        <span className="flex items-center gap-2"><Users className="h-4 w-4 text-[#ff1f45]" /> 150+ Teams </span>
                       </div>
                       <div className="mt-7 flex flex-wrap gap-3">
                         <Link href={`/ctf/${liveEvent.id}`} className="inline-flex items-center gap-2 rounded-md bg-[#ff1f45] px-6 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-[0_0_24px_rgba(255,0,60,0.45)] transition-all duration-300 hover:bg-[#ff003c]">Join CTF <ChevronRight className="h-4 w-4" /></Link>

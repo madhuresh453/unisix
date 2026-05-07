@@ -1,13 +1,13 @@
 import { Button } from "@/components/ui/Button";
 
 const partners = [
-  "CTFd",
-  "BSides",
-  "Nullcon",
-  "OWASP",
-  "ISACA",
-  "Nasscom",
-  "Cybervergent"
+  "UNISIX SECURITY",
+  "Thunder Cipher",
+  "SmartED Innovations",
+  "Cyber Hunter Warrior",
+  "Cyber Leelawat",
+  "HKU Software Community",
+  "SUS CC"
 ];
 
 export function PartnersSection() {

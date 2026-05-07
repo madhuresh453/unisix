@@ -19,10 +19,10 @@ const sponsorTiers = [
       tag: "bg-yellow-500/10 text-[#facc15]"
     },
     logos: [
-      { name: "Palo Alto", initials: "PA", subtitle: "Enterprise security", bg: "bg-white/5 text-white" },
-      { name: "Cloudflare", initials: "CF", subtitle: "Global edge", bg: "bg-white/5 text-white" },
-      { name: "AWS", initials: "AWS", subtitle: "Cloud infrastructure", bg: "bg-white/5 text-white" },
-      { name: "Microsoft", initials: "MS", subtitle: "Hybrid cloud", bg: "bg-white/5 text-white" }
+      { name: "THUNDER CIPHER", initials: "TC", subtitle: "Cyber security", bg: "bg-white/5 text-[#facc15]" },
+      { name: "SmartED Innovation", initials: "S", subtitle: "Institution", bg: "bg-white/5 text-white" },
+      
+      
     ]
   },
   {
@@ -35,10 +35,8 @@ const sponsorTiers = [
       tag: "bg-[#facc15]/10 text-[#facc15]"
     },
     logos: [
-      { name: "Google Cloud", initials: "GC", subtitle: "AI & security", bg: "bg-white/5 text-white" },
-      { name: "IBM", initials: "IBM", subtitle: "Enterprise trust", bg: "bg-white/5 text-white" },
-      { name: "HackTheBox", initials: "HTB", subtitle: "Training network", bg: "bg-white/5 text-white" },
-      { name: "Akamai", initials: "AK", subtitle: "Edge defense", bg: "bg-white/5 text-white" }
+      { name: "UNISIX", initials: "U6", subtitle: "Security", bg: "bg-white/5 text-white" },
+      { name: "SUS CC", initials: "SUS", subtitle: "Financial Support", bg: "bg-white/5 text-white" },
     ]
   },
   {
@@ -51,10 +49,9 @@ const sponsorTiers = [
       tag: "bg-white/10 text-slate-300"
     },
     logos: [
-      { name: "Bugcrowd", initials: "BC", subtitle: "Crowdsourced security", bg: "bg-white/5 text-white" },
-      { name: "Synack", initials: "SY", subtitle: "Red team network", bg: "bg-white/5 text-white" },
-      { name: "Intigriti", initials: "IN", subtitle: "Bug bounty", bg: "bg-white/5 text-white" },
-      { name: "PortSwigger", initials: "PS", subtitle: "Web sec tooling", bg: "bg-white/5 text-white" }
+      { name: "CYBER HUNTER WARRIOR", initials: "CHW", subtitle: "Cyber security  ", bg: "bg-white/5 text-white" },
+      { name: "CYBER LEELAWAT", initials: "CL", subtitle: "Institution Partner", bg: "bg-white/5 text-white" },
+      
     ]
   }
 ];

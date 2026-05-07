@@ -8,65 +8,65 @@ import { PageShell } from "@/components/ui/PageShell";
 
 const coreTeam = [
   {
-    name: "Nyx Caldwell",
-    title: "Founder & CEO",
+    name: "Krish Pathania",
+    title: "Co-Founder & Chief Operating Officer",
     description: "Cyber command strategist leading elite operations, product vision, and mission architecture.",
-    badge: "FOUNDER"
+    badge: "CF"
   },
   {
-    name: "Iris Vega",
-    title: "Co-Founder & CISO",
+    name: "Raj Kumar ",
+    title: "Chief Operating Officer & Chief Information Security Officer ",
     description: "Adversary simulation lead focused on red team strategy, risk operations, and security posture.",
     badge: "CISO"
   },
   {
-    name: "Zane Rook",
-    title: "Operations Lead",
+    name: "TanishPreet Singh",
+    title: "Chief Technology Officer)",
     description: "Real-time exploit orchestration specialist powering live events, infrastructure, and response.",
-    badge: "LEAD"
+    badge: "CTO"
   },
   {
-    name: "Cass Nova",
-    title: "Intelligence Lead",
+    name: "Prabhjot singh",
+    title: "Operations Manager",
     description: "Threat analysis architect delivering campaign insights, surveillance, and attacker tradecraft.",
     badge: "LEAD"
   },
   {
-    name: "Raven Sharp",
-    title: "Deployment Chief",
+    name: "Jaspreet Singh",
+    title: "Operations Manager",
     description: "Infrastructure commander building secure pipelines, automation, and tactical deployments.",
-    badge: "CHIEF"
+    badge: "LEAD"
   }
 ];
 
 const developers = [
   {
-    name: "Echo Lin",
+    name: "Madhuresh Kumar Jha",
     title: "Software Lead",
     description: "Designs the core platform, APIs, and backend systems for mission-critical delivery."
   },
   {
-    name: "Mira Quill",
+    name: "Raj Kumar",
     title: "Platform Engineer",
     description: "Builds secure, scalable systems for live scoring, telemetry, and event orchestration."
   },
   {
-    name: "Asher Cole",
+    name: "Krish Pathania",
     title: "Backend Architect",
     description: "Owns architecture for resilient challenge systems, data flow, and performance tuning."
   },
   {
-    name: "Nova Chen",
+    name: "TanishPreet Singh",
     title: "UX Engineer",
     description: "Crafts polished interfaces, dashboard flows, and tactical display experiences."
   },
   {
-    name: "Sage Quinn",
+    name: "Prabhjot Singh",
     title: "API Specialist",
     description: "Delivers secure integrations, platform extensibility, and developer tooling."
   },
   {
-    name: "Ryder Vale",
+    name: "Jaspreet Singh",
     title: "Firmware Integrator",
     description: "Connects advanced hardware telemetry and field devices to cyber operations systems."
   }
@@ -74,17 +74,17 @@ const developers = [
 
 const researchers = [
   {
-    name: "Lena Ortiz",
+    name: "Raj Kumar",
     title: "Senior Researcher",
     description: "Security researcher focused on malware analysis, exploit discovery, and forensic tooling."
   },
   {
-    name: "Mei Tan",
+    name: "Tanishpreet Singh",
     title: "Crypto Specialist",
     description: "Cryptanalysis lead driving cipher hunts, protocol audits, and challenge review."
   },
   {
-    name: "Aarav Singh",
+    name: "Anoynmous",
     title: "Penetration Tester",
     description: "Exercises infrastructure and product attack surfaces across every UNI6CTF mission."
   }

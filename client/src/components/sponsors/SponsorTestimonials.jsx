@@ -3,21 +3,27 @@ import { ArrowLeft, ArrowRight, MessageSquare } from "lucide-react";
 const testimonials = [
   {
     quote: "UNI6CTF delivered exceptional brand exposure and a world-class audience of security professionals. Our sponsorship helped us recruit top talent and build credibility in cyber communities.",
-    name: "Ava Lawson",
-    role: "Global Partnerships Lead",
-    company: "Palo Alto Networks"
+    name: "Anoop Singh Yadav",
+    role: "CEO & FOUNDER",
+    company: "Thunder Cipher"
   },
   {
     quote: "The event execution and partner support were flawless. We saw measurable engagement from developers, researchers, and enterprise buyers.",
-    name: "Rohan Patel",
-    role: "Head of Strategic Alliances",
-    company: "Google Cloud"
+    name: "Dhiraj Kumar",
+    role: "CEO",
+    company: "Cyber Hunter Warrior"
   },
   {
     quote: "UNI6CTF understands the security audience. Sponsoring the platform helped us connect with the right people and amplify our product story.",
-    name: "Sofia Cheng",
-    role: "Marketing Director",
-    company: "CrowdStrike"
+    name: "Virender Kumar",
+    role: "Founder",
+    company: "Cyber Leelawat"
+  },
+  {
+    quote: "UNI6CTF understands the security audience. Sponsoring the platform helped us connect with the right people and amplify our product story.",
+    name: "Ahmet Sezgin",
+    role: "Vice President",
+    company: "Hasan Kalyoncu University Software Community -Turkey"
   }
 ];
 
