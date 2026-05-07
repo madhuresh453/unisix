@@ -28,20 +28,23 @@ io.on("connection", (socket) => {
 });
 
 async function bootstrap() {
-  await connectDB();
+  try {
+    console.log("Connecting to MongoDB...");
+    await connectDB();
+    console.log("MongoDB connected successfully");
 
-  if (env.nodeEnv !== "test") {
-    startLeaderboardJob();
-    startCleanupJob();
-    startEmailJob();
+    if (env.nodeEnv !== "test") {
+      startLeaderboardJob();
+      startCleanupJob();
+      startEmailJob();
+    }
+
+    server.listen(env.port, () => {
+      console.log(`UNI6CTF API listening on port ${env.port}`);
+    });
+  } catch (error) {
+    console.error("BOOTSTRAP ERROR:");
+    console.error(error);
+    process.exit(1);
   }
-
-  server.listen(env.port, () => {
-    console.log(`UNI6CTF API listening on http://localhost:${env.port}`);
-  });
 }
-
-bootstrap().catch((error) => {
-  console.error("Failed to boot UNI6CTF API", error);
-  process.exit(1);
-});
