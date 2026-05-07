@@ -1,3 +1,13 @@
+console.log("SERVER FILE STARTING...");
+
+process.on("uncaughtException", (err) => {
+  console.error("UNCAUGHT EXCEPTION:", err);
+});
+
+process.on("unhandledRejection", (err) => {
+  console.error("UNHANDLED REJECTION:", err);
+});
+
 import http from "http";
 import { Server } from "socket.io";
 import app from "./src/app.js";
@@ -10,9 +20,11 @@ import { startLeaderboardJob } from "./src/jobs/leaderboardJob.js";
 import { registerNotificationSocket } from "./src/sockets/notifications.js";
 import { registerScoreboardSocket } from "./src/sockets/scoreboard.js";
 
+console.log("Checking production secrets...");
 assertProductionSecrets();
 
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
     origin: env.clientUrl,
@@ -48,3 +60,6 @@ async function bootstrap() {
     process.exit(1);
   }
 }
+
+console.log("Bootstrapping server...");
+bootstrap();
