@@ -17,7 +17,7 @@ export function Navbar() {
     <header className="sticky top-0 z-50 border-b border-white/[0.08] bg-[#050505] shadow-[0_8px_30px_rgba(0,0,0,0.65)]">
       <div className="flex h-[72px] w-full items-center justify-between gap-5 px-6 lg:h-[88px]">
         <Link href="/" className="group flex shrink-0 items-center gap-3">
-          <Image
+          {/* <Image
                                       src="/images/UNI6CTF -final logo.png"
                                       alt="UNI6CTF Logo"
                                       width={90}
@@ -29,7 +29,7 @@ export function Navbar() {
                             object-cover
                            
                           "
-                                    />
+                                    /> */}
           <span className="font-display text-[23px] font-black uppercase leading-none tracking-[0.02em] text-white sm:text-[28px]">
             UNI6<span className="text-cyber-red">CTF</span>
           </span>

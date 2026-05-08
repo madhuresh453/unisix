@@ -21,7 +21,7 @@ const coreTeam = [
   },
   {
     name: "TanishPreet Singh",
-    title: "Chief Technology Officer)",
+    title: "Chief Technology Officer",
     description: "Real-time exploit orchestration specialist powering live events, infrastructure, and response.",
     badge: "CTO"
   },
@@ -42,32 +42,32 @@ const coreTeam = [
 const developers = [
   {
     name: "Madhuresh Kumar Jha",
-    title: "Software Lead",
+    title: "Software Lead & PURPLE TEAMING",
     description: "Designs the core platform, APIs, and backend systems for mission-critical delivery."
   },
   {
     name: "Raj Kumar",
-    title: "Platform Engineer",
+    title: "FORENSICS EXPERT & BLUE TEAMING",
     description: "Builds secure, scalable systems for live scoring, telemetry, and event orchestration."
   },
   {
     name: "Krish Pathania",
-    title: "Backend Architect",
+    title: "FORENSICS EXPERT & BLUE TEAMING",
     description: "Owns architecture for resilient challenge systems, data flow, and performance tuning."
   },
   {
     name: "TanishPreet Singh",
-    title: "UX Engineer",
+    title: "REVERSE Engineer & RED TEAMING",
     description: "Crafts polished interfaces, dashboard flows, and tactical display experiences."
   },
   {
     name: "Prabhjot Singh",
-    title: "API Specialist",
+    title: "OSINT Analyst",
     description: "Delivers secure integrations, platform extensibility, and developer tooling."
   },
   {
     name: "Jaspreet Singh",
-    title: "Firmware Integrator",
+    title: "OSINT Analyst",
     description: "Connects advanced hardware telemetry and field devices to cyber operations systems."
   }
 ];
@@ -80,7 +80,7 @@ const researchers = [
   },
   {
     name: "Tanishpreet Singh",
-    title: "Crypto Specialist",
+    title: "R.E Specialist",
     description: "Cryptanalysis lead driving cipher hunts, protocol audits, and challenge review."
   },
   {
@@ -92,18 +92,18 @@ const researchers = [
 
 const organizers = [
   {
-    name: "Rohan Iyer",
-    title: "Event Operations",
+    name: "IN-0x0",
+    title: "Event ORGANIZER",
     description: "Coordinates global launches, competition logistics, and real-time event command."
   },
   {
-    name: "Harley Storm",
-    title: "Community Director",
+    name: "UNI6CTF",
+    title: "CTF",
     description: "Builds elite hacker networks, partnerships, and recruitment campaigns."
   },
   {
-    name: "Suri Blake",
-    title: "Logistics Lead",
+    name: "UNISIX SECURITY",
+    title: "SECURITY PROVIDER",
     description: "Manages mission resources, timelines, and secure coordination for large-scale events."
   }
 ];
