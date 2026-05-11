@@ -564,3 +564,14 @@ export const writeups = [
       "This forensic investigation follows the complete process injection chain from suspicious memory artifacts to recovered payloads and operator notes. The analysis includes process tree reconstruction, DLL injection tracing, and memory carving techniques.",
   },
 ];
+export const challenges = [];
+
+export const dashboardStats = [];
+
+export const activity = [];
+
+export const submissions = [];
+
+export const achievements = [];
+
+export const leaderboardRows = [];
