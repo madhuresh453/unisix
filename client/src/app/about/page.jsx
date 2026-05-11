@@ -298,7 +298,7 @@ export default function AboutPage() {
   </div>
 </section>
 
-      <section className="relative z-10 mx-auto max-w-[1400px] px-6 py-8">
+      <section className="relative z-10 mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid gap-4 md:grid-cols-3">
           {missionCards.map((card) => {
             const Icon = card.icon;
@@ -335,7 +335,7 @@ export default function AboutPage() {
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto max-w-[1400px] px-6 pb-8">
+      <section className="relative z-10 mx-auto w-full max-w-7xl px-4 pb-8 sm:px-6 lg:px-8">
         <div className="grid gap-4 lg:grid-cols-[1.05fr_1fr]">
           <article className="rounded-xl border border-white/15 bg-[linear-gradient(145deg,rgba(16,21,31,0.75),rgba(8,10,14,0.82))] p-7 backdrop-blur-md">
             <h3

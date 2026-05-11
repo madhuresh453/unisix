@@ -167,8 +167,8 @@ export function ReferenceHome() {
       <div className="pointer-events-none absolute inset-y-0 right-0 w-16 border-l border-cyber-red/10 bg-[linear-gradient(135deg,transparent_30%,rgba(255,26,26,0.24)_31%,transparent_32%)] opacity-50" />
 
       <section className="relative w-full">
-        <div className="mx-auto max-w-[1400px] px-6">
-          <div className="relative min-h-[620px] overflow-hidden rounded-xl border border-white/[0.08] sm:min-h-[650px] lg:min-h-[608px]">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative min-h-[460px] overflow-hidden rounded-xl border border-white/[0.08] sm:min-h-[520px] lg:min-h-[608px]">
             <div className="absolute inset-0">
               <Image
                 src="/images/uni6ctf-hero.png"
@@ -180,7 +180,7 @@ export function ReferenceHome() {
               />
             </div>
 
-            <div className="relative w-full px-6 pb-8 pt-0">
+            <div className="relative w-full px-4 pb-8 pt-0 sm:px-6 md:px-8">
               <div className="w-full pt-[58px] sm:pt-[74px]">
                 <p className="text-[13px] font-black uppercase tracking-[0.18em] text-cyber-red text-red-glow sm:text-[15px]">
                   Capture the Flag
@@ -204,7 +204,7 @@ export function ReferenceHome() {
                     href="/ctf/live"
                     icon={ArrowRight}
                     iconPosition="right"
-                    className="min-h-[48px] rounded-md px-6"
+                    className="min-h-[48px] rounded-md px-6 w-full sm:w-auto"
                   >
                     Join Live CTF
                   </Button>
@@ -213,7 +213,7 @@ export function ReferenceHome() {
                     variant="secondary"
                     icon={ArrowRight}
                     iconPosition="right"
-                    className="min-h-[48px] rounded-md border-white/[0.28] bg-white/[0.02] px-6"
+                    className="min-h-[48px] rounded-md border-white/[0.28] bg-white/[0.02] px-6 w-full sm:w-auto"
                   >
                     Explore Events
                   </Button>
@@ -232,7 +232,7 @@ export function ReferenceHome() {
         </div>
       </section>
 
-      <div className="relative z-10 mx-auto  max-w-[1400px] px-6">
+      <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid overflow-hidden rounded-md border border-white/20 bg-[#070b0d]/92 shadow-[0_18px_70px_rgba(0,0,0,0.55)] backdrop-blur md:grid-cols-2 lg:grid-cols-4">
           {stats.map((stat, index) => (
             <StatItem
@@ -244,7 +244,7 @@ export function ReferenceHome() {
         </div>
       </div>
 
-      <section className="relative mx-auto max-w-[1400px] px-6 pb-8 pt-8">
+      <section className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="relative min-h-[262px] overflow-hidden rounded-md border border-cyber-red/65 bg-[#05090b]/92 px-6 py-7 shadow-[inset_0_0_50px_rgba(255,26,26,0.04),0_0_22px_rgba(255,26,26,0.12)] sm:py-8">
           <div className="absolute inset-0 bg-[linear-gradient(110deg,rgba(255,0,0,0.11),transparent_28%,rgba(255,0,0,0.08),transparent_70%)]" />
           <TrophyArt />
@@ -343,7 +343,7 @@ export function ReferenceHome() {
         </div>
       </section>
 
-      <section className="relative mx-auto grid max-w-[1400px] gap-8 px-6 py-5 md:grid-cols-[154px_1fr] md:items-center lg:grid-cols-[190px_1fr_1fr_168px]">
+      <section className="relative mx-auto w-full grid max-w-7xl gap-8 px-4 py-5 sm:px-6 md:grid-cols-[154px_1fr] md:items-center lg:grid-cols-[190px_1fr_1fr_168px] lg:px-8">
         <div className="hidden md:flex">
           <div className="relative grid h-[154px] w-[154px] place-items-center rounded-full border border-cyber-red/25 bg-cyber-red/5 text-cyber-red">
             <div className="absolute inset-3 rounded-full border border-cyber-red/30" />
@@ -390,7 +390,7 @@ export function ReferenceHome() {
         </Button>
       </section>
 
-      <section className="relative mx-auto max-w-[1400px] px-6 py-5">
+      <section className="relative mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
         <SectionLabel>Our Achievements</SectionLabel>
         <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
           {achievements.map((achievement) => {
@@ -455,7 +455,7 @@ export function ReferenceHome() {
 </div>
       </section>
 
-      <section className="relative mx-auto max-w-[1400px] px-6 pb-11 pt-4">
+      <section className="relative mx-auto w-full max-w-7xl px-4 pb-11 pt-4 sm:px-6 lg:px-8">
         <SectionLabel>Our Partners</SectionLabel>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
           {partners.map((partner) => {

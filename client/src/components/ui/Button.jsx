@@ -17,7 +17,7 @@ export function Button({
   ...props
 }) {
   const classes = cn(
-    "focus-ring inline-flex min-h-11 items-center justify-center gap-2 rounded-xl px-6 py-3 text-sm font-bold uppercase tracking-[0.12em] transition-all duration-300 ease-out hover:-translate-y-0.5",
+    "focus-ring inline-flex w-full justify-center min-h-11 items-center gap-2 rounded-xl px-6 py-3 text-sm font-bold uppercase tracking-[0.12em] transition-all duration-300 ease-out hover:-translate-y-0.5 sm:w-auto",
     variants[variant],
     className
   );

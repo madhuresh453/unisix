@@ -42,7 +42,8 @@ export function ChallengeSubmission({ challengeId }) {
           placeholder="UNI6{flag_here}"
           className="flex-1"
         />
-        <Button icon={Send} disabled={state.loading}>
+        <Button disabled={state.loading}>
+          <Send className="h-4 w-4" />
           {state.loading ? "Checking" : "Submit"}
         </Button>
       </div>
