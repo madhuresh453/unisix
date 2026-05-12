@@ -11,10 +11,8 @@ import {
 } from "lucide-react";
 
 import { events } from "@/utils/constants";
-import {
-  formatDateTime,
-  getCountdownParts,
-} from "@/utils/formatters";
+import { formatDateTime } from "@/utils/formatters";
+import { CountdownTimer } from "@/components/CountdownTimer";
 
 export default async function EventDetailsPage({ params }) {
   // NEXT JS 15 FIX
@@ -32,11 +30,9 @@ export default async function EventDetailsPage({ params }) {
     notFound();
   }
 
-  const countdown = getCountdownParts(event.startsAt);
-
   const isLive = event.status === "live";
-  const isPast = event.status === "past";
   const isUpcoming = event.status === "upcoming";
+  const isPast = event.status === "past";
 
   return (
     <main className="bg-[#050505] text-white min-h-screen">
@@ -162,37 +158,13 @@ export default async function EventDetailsPage({ params }) {
       </section>
 
       {/* COUNTDOWN */}
-      {isUpcoming && (
-        <section className="mx-auto w-full max-w-[1400px] px-6 pb-14">
-          <div className="rounded-[32px] border border-[#ff1f45]/60 bg-[rgba(14,6,8,0.98)] p-10 text-center shadow-[0_40px_120px_rgba(255,0,60,0.14)]">
-            <h2 className="font-teko text-4xl uppercase tracking-[0.01em] text-white">
-              Event Starts In
-            </h2>
-
-            <div className="mt-10 grid gap-6 sm:grid-cols-4">
-              {[
-                { label: "Days", value: countdown.days },
-                { label: "Hours", value: countdown.hours },
-                { label: "Minutes", value: countdown.minutes },
-                { label: "Seconds", value: countdown.seconds },
-              ].map((block) => (
-                <div
-                  key={block.label}
-                  className="rounded-[28px] border border-white/10 bg-[#080808]/95 p-6"
-                >
-                  <p className="font-teko text-6xl text-[#ff1f45]">
-                    {block.value}
-                  </p>
-
-                  <p className="mt-3 text-xs uppercase tracking-[0.24em] text-white/60">
-                    {block.label}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
+      <section className="mx-auto w-full max-w-[1400px] px-6 pb-14">
+        <CountdownTimer
+          startDate={event.startsAt}
+          endDate={event.endsAt}
+          status={event.status}
+        />
+      </section>
 
       {/* MAIN CONTENT */}
       <section className="mx-auto w-full max-w-[1400px] px-6 pb-20">

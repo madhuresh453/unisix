@@ -3,7 +3,7 @@ import { events } from "@/utils/constants";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
-import { Countdown } from "./Countdown";
+import { CountdownTimer } from "@/components/CountdownTimer";
 
 export function LiveEventFeature() {
   const event = events.find((item) => item.status === "live");
@@ -35,10 +35,11 @@ export function LiveEventFeature() {
           </div>
         </div>
         <div className="border-t border-white/10 bg-cyber-red/5 p-6 md:p-8 lg:border-l lg:border-t-0">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-cyber-muted">Ends in</p>
-          <div className="mt-4">
-            <Countdown targetDate={event.endsAt} />
-          </div>
+          <CountdownTimer
+            startDate={event.startsAt}
+            endDate={event.endsAt}
+            status={event.status}
+          />
           <div className="mt-6 grid gap-3">
             {event.categories.map((category) => (
               <div key={category} className="flex items-center justify-between rounded-xl border border-white/10 bg-black/25 px-4 py-3">

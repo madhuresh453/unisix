@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 
 import {
   ArrowRight,
@@ -17,6 +17,8 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { CountdownTimer } from "@/components/CountdownTimer";
+import { events } from "@/utils/constants";
 
 const stats = [
   { icon: Flag, value: "3+", label: "CTF Events", sub: "Hosted" },
@@ -113,52 +115,11 @@ function TrophyArt() {
 }
 
 export function ReferenceHome() {
-  const eventDate = new Date("2026-05-15T19:30:00").getTime();
+  const liveEvent = useMemo(
+    () => events.find((item) => item.status === "live") || events[0],
+    [],
+  );
 
-  const [timeLeft, setTimeLeft] = useState({
-    days: "00",
-    hours: "00",
-    minutes: "00",
-    seconds: "00",
-  });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      const now = new Date().getTime();
-      const distance = eventDate - now;
-
-      if (distance <= 0) {
-        clearInterval(timer);
-
-        setTimeLeft({
-          days: "00",
-          hours: "00",
-          minutes: "00",
-          seconds: "00",
-        });
-
-        return;
-      }
-
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor(
-        (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
-      );
-
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-      setTimeLeft({
-        days: String(days).padStart(2, "0"),
-        hours: String(hours).padStart(2, "0"),
-        minutes: String(minutes).padStart(2, "0"),
-        seconds: String(seconds).padStart(2, "0"),
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [eventDate]);
   return (
     <main className="relative overflow-hidden bg-[#050505] text-white">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(255,26,26,0.11)_1px,transparent_1px),linear-gradient(rgba(255,26,26,0.08)_1px,transparent_1px)] bg-[size:96px_96px] opacity-[0.075]" />
@@ -255,13 +216,13 @@ export function ReferenceHome() {
                 Live Now
               </p>
               <h2 className="mt-5 font-cyber-title text-[28px] font-black uppercase leading-none tracking-[0.07em] text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.25)] sm:text-[36px]">
-                CTF 4 CYBER CHALLENGE
+                {liveEvent.name}
               </h2>
               <p className="mt-4 w-full text-[16px] leading-7 text-white/88">
-                TURKEY
+                {liveEvent.location || liveEvent.format || "Live event in progress"}
               </p>
               <Button
-                href="/ctf/live"
+                href={`/ctf/${liveEvent.slug || liveEvent.id}`}
                 icon={ArrowRight}
                 iconPosition="right"
                 className="mt-5 min-h-[48px] rounded-md px-7"
@@ -270,64 +231,11 @@ export function ReferenceHome() {
               </Button>
             </div>
             <div className="relative z-10 flex flex-col justify-center gap-7 lg:pr-[190px] xl:pr-[220px]">
-              <div className="grid grid-cols-2 gap-3 min-[520px]:grid-cols-4">
-                {[
-                  [timeLeft.days, "Days"],
-                  [timeLeft.hours, "Hours"],
-                  [timeLeft.minutes, "Mins"],
-                  [timeLeft.seconds, "Secs"],
-                ].map(([value, label]) => (
-                  <div
-                    key={label}
-                    className="
-          group
-          min-h-[92px]
-          min-w-0
-          rounded-md
-          border
-          border-white/18
-          bg-[#070b0f]/80
-          px-2
-          py-5
-          text-center
-          transition-all
-          duration-300
-          hover:border-cyber-red/60
-          hover:shadow-[0_0_22px_rgba(255,0,0,0.18)]
-        "
-                  >
-                    <p
-                      className="
-            font-display
-            text-[30px]
-            font-black
-            leading-none
-            text-cyber-red
-            text-red-glow
-            transition-transform
-            duration-300
-            group-hover:scale-110
-            sm:text-[36px]
-          "
-                    >
-                      {value}
-                    </p>
-
-                    <p
-                      className="
-            mt-3
-            text-[11px]
-            font-black
-            uppercase
-            tracking-[0.08em]
-            text-white
-          "
-                    >
-                      {label}
-                    </p>
-                  </div>
-                ))}
-              </div>
+              <CountdownTimer
+                startDate={liveEvent.startsAt}
+                endDate={liveEvent.endsAt}
+                status={liveEvent.status}
+              />
               <div className="flex flex-wrap items-center gap-4 text-[12px] font-bold uppercase tracking-[0.12em] text-white/78 sm:text-[13px]">
                 <span className="flex items-center gap-2">
                   <span className="h-3 w-3 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.8)]" />
@@ -335,7 +243,7 @@ export function ReferenceHome() {
                 </span>
                 <span className="flex items-center gap-2">
                   <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_10px_rgba(52,211,153,0.75)]" />
-                  842
+                  {liveEvent.participants || liveEvent.players || "N/A"}
                 </span>
               </div>
             </div>

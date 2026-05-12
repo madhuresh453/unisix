@@ -46,6 +46,12 @@ export const metadata = {
 
   description:
     "A production-ready cybersecurity CTF platform for events, challenges, scoreboards, writeups, and hacker community operations.",
+
+  icons: {
+    icon: "/images/u6 favicon.png",
+    shortcut: "/images/u6 favicon.png",
+    apple: "/images/u6 favicon.png",
+  },
 };
 
 export default function RootLayout({

@@ -1,7 +1,6 @@
 "use client";
 
 import { createContext, useEffect, useMemo, useState } from "react";
-import { io } from "socket.io-client";
 
 export const SocketContext = createContext({
   socket: null,
@@ -13,17 +12,22 @@ export function SocketProvider({ children }) {
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-    const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:5000";
-    const client = io(socketUrl, {
-      transports: ["websocket"],
-      autoConnect: true
+    // Dynamic import to avoid SSR issues with socket.io-client
+    import("socket.io-client").then(({ io }) => {
+      const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || "http://localhost:5000";
+      const client = io(socketUrl, {
+        transports: ["websocket"],
+        autoConnect: true
+      });
+
+      client.on("connect", () => setConnected(true));
+      client.on("disconnect", () => setConnected(false));
+      setSocket(client);
+
+      return () => client.disconnect();
+    }).catch((error) => {
+      console.warn("Failed to load socket.io-client:", error);
     });
-
-    client.on("connect", () => setConnected(true));
-    client.on("disconnect", () => setConnected(false));
-    setSocket(client);
-
-    return () => client.disconnect();
   }, []);
 
   const value = useMemo(() => ({ socket, connected }), [socket, connected]);

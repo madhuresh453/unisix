@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { events } from "@/utils/constants";
+import { CountdownTimer } from "@/components/CountdownTimer";
 
 const scoreboard = [
   { rank: 1, team: "PBKS", score: 9850 },
@@ -16,39 +17,6 @@ const scoreboard = [
   { rank: 3, team: "The Exploiters", score: 7410 },
   { rank: 4, team: "pwn4fun", score: 6120 },
   { rank: 5, team: "0xDeadBeef", score: 5890 },
-];
-
-const upcomingCards = [
-  {
-    slug: "ctf4-cyber-challenge",
-    month: "MAY",
-    day: "15",
-    title: "CTF4 CYBER CHALLENGE",
-    copy: "Dive into Capture The Flag challenges and test your hacking skills.",
-    duration: "24 Hours",
-    players: "200+ Players",
-    difficulty: "Med-Hard",
-  },
-  {
-    slug: "uni6ctf-online-warzone",
-    month: "DECEMBER",
-    day: "15",
-    title: "UNI6CTF ONLINE WARZONE",
-    copy: "Break the ciphers. Decode, decrypt and conquer.",
-    duration: "48 Hours",
-    players: "1000+ Players",
-    difficulty: "MED",
-  },
-  {
-    slug: "uni6ctf-2",
-    month: "SOON",
-    day: "SOON",
-    title: "UNI6CTF 2.0",
-    copy: "Perfect for newcomers. Learn practical CTF workflows fast.",
-    duration: "24 Hours",
-    players: "1000+ Teams",
-    difficulty: "Medium",
-  },
 ];
 
 const pastRows = [
@@ -85,6 +53,7 @@ const pastRows = [
 export default function CTFPage() {
   const liveEvent =
     events.find((event) => event.status === "live") || events[0];
+  const upcomingEvents = events.filter((event) => event.status === "upcoming").slice(0, 3);
 
   return (
     <main className="bg-[#050505] text-white min-h-screen">
@@ -202,9 +171,17 @@ export default function CTFPage() {
                         </span>
                       </div>
 
+                      <div className="mt-8">
+                        <CountdownTimer
+                          startDate={liveEvent.startsAt}
+                          endDate={liveEvent.endsAt}
+                          status={liveEvent.status}
+                        />
+                      </div>
+
                       <div className="mt-7 flex flex-wrap gap-3">
                         <Link
-                          href={`/ctf/${liveEvent.slug}`}
+                          href={`/ctf/${liveEvent.slug || liveEvent.id}`}
                           className="inline-flex items-center gap-2 rounded-md bg-[#ff1f45] px-6 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-[0_0_24px_rgba(255,0,60,0.45)] transition-all duration-300 hover:bg-[#ff003c]"
                         >
                           Join CTF
@@ -212,7 +189,7 @@ export default function CTFPage() {
                         </Link>
 
                         <Link
-                          href={`/ctf/${liveEvent.slug}`}
+                          href={`/ctf/${liveEvent.slug || liveEvent.id}`}
                           className="inline-flex items-center gap-2 rounded-md border border-white/30 px-6 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-white transition-all duration-300 hover:border-[#ff1f45]/70 hover:bg-[#18090d]"
                         >
                           View Details
@@ -280,33 +257,33 @@ export default function CTFPage() {
               </div>
 
               <div className="grid gap-5 lg:grid-cols-3">
-                {upcomingCards.map((card) => (
+                {upcomingEvents.map((event) => (
                   <article
-                    key={card.slug}
+                    key={event.id}
                     className="group rounded-xl border border-white/10 bg-[#080808] p-5 transition-all duration-300 hover:-translate-y-1 hover:border-[#ff1f45]/60 hover:shadow-[0_0_22px_rgba(255,0,60,0.22)]"
                   >
                     <span className="inline-flex rounded-md bg-[#312806] px-3 py-1 text-xs font-semibold uppercase tracking-[0.1em] text-[#ffd61f]">
-                      Registration Open
+                      {event.registrationOpen ? "Registration Open" : "Upcoming"}
                     </span>
 
                     <div className="mt-4 flex gap-4">
                       <div className="grid h-20 w-16 place-content-center rounded-lg border border-white/20 bg-black/60 text-center">
                         <span className="text-xs font-bold uppercase text-[#ff1f45]">
-                          {card.month}
+                          {new Date(event.startsAt).toLocaleDateString("en", { month: "short" }).toUpperCase()}
                         </span>
 
                         <span className="font-teko text-4xl leading-none">
-                          {card.day}
+                          {new Date(event.startsAt).getDate()}
                         </span>
                       </div>
 
                       <div>
                         <h3 className="font-teko text-[42px] uppercase leading-[0.85]">
-                          {card.title}
+                          {event.name}
                         </h3>
 
                         <p className="mt-2 text-sm text-white/70">
-                          {card.copy}
+                          {event.description.slice(0, 90)}...
                         </p>
                       </div>
                     </div>
@@ -314,23 +291,31 @@ export default function CTFPage() {
                     <div className="mt-4 flex flex-wrap gap-4 text-sm text-white/70">
                       <span className="flex items-center gap-1">
                         <Clock3 className="h-4 w-4 text-[#ff1f45]" />
-                        {card.duration}
+                        {event.duration}
                       </span>
 
                       <span className="flex items-center gap-1">
                         <Users className="h-4 w-4 text-[#ff1f45]" />
-                        {card.players}
+                        {event.players || event.teams}
                       </span>
 
                       <span className="flex items-center gap-1">
                         <Activity className="h-4 w-4 text-[#ff1f45]" />
-                        {card.difficulty}
+                        {event.difficulty}
                       </span>
+                    </div>
+
+                    <div className="mt-5">
+                      <CountdownTimer
+                        startDate={event.startsAt}
+                        endDate={event.endsAt}
+                        status={event.status}
+                      />
                     </div>
 
                     <div className="mt-5 flex gap-3">
                       <Link
-                        href={`/ctf/${card.slug}`}
+                        href={`/ctf/${event.slug || event.id}`}
                         className="inline-flex items-center gap-2 rounded-md bg-[#ffcf00] px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-black transition-all duration-300 hover:brightness-105"
                       >
                         Register Now
@@ -338,7 +323,7 @@ export default function CTFPage() {
                       </Link>
 
                       <Link
-                        href={`/ctf/${card.slug}`}
+                        href={`/ctf/${event.slug || event.id}`}
                         className="inline-flex items-center rounded-md border border-white/20 px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] text-white transition-all duration-300 hover:border-[#ff1f45]/70"
                       >
                         View Details

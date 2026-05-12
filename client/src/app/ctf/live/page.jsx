@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { events } from "@/utils/constants";
 import { formatDateTime } from "@/utils/formatters";
+import { CountdownTimer } from "@/components/CountdownTimer";
 
 export default function LiveCTFPage() {
   const liveEvents = events.filter((event) => event.status === "live");
@@ -70,6 +71,13 @@ export default function LiveCTFPage() {
                       <span className="flex items-center gap-2"><Calendar className="h-4 w-4 text-[#ff1f45]" /> {formatDateTime(event.startsAt)}</span>
                       <span className="flex items-center gap-2"><Clock3 className="h-4 w-4 text-[#ff1f45]" /> {event.duration}</span>
                       <span className="flex items-center gap-2"><Users className="h-4 w-4 text-[#ff1f45]" /> {event.players}</span>
+                    </div>
+                    <div className="mt-8">
+                      <CountdownTimer
+                        startDate={event.startsAt}
+                        endDate={event.endsAt}
+                        status={event.status}
+                      />
                     </div>
                     <div className="mt-7 flex flex-wrap gap-3">
                       <Link href={`/ctf/${event.id}/register`} className="inline-flex items-center gap-2 rounded-md bg-[#ff1f45] px-6 py-3 text-sm font-semibold uppercase tracking-[0.08em] text-white shadow-[0_0_24px_rgba(255,0,60,0.45)] transition-all duration-300 hover:bg-[#ff003c]">Join CTF <ChevronRight className="h-4 w-4" /></Link>

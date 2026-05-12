@@ -347,49 +347,78 @@ const sendEmail = async (e) => {
       </section>
 
       <section className="rounded-[32px] border border-white/10 bg-[#080808]/95 p-8 shadow-[0_35px_100px_rgba(0,0,0,0.18)]">
-        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-          <div>
-            <p className="text-xs uppercase tracking-[0.32em] text-[#ff1f45]">
-              CONNECT WITH US
-            </p>
-            <h2 className="mt-4 text-3xl font-black uppercase tracking-[-0.03em] text-white sm:text-4xl">
-              Follow us for the latest updates and announcements.
-            </h2>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70">
-              Stay connected with UNI6CTF across every social channel and never
-              miss a community alert or challenge drop.
-            </p>
-          </div>
+  <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+    
+    <div>
+      <p className="text-xs uppercase tracking-[0.32em] text-[#ff1f45]">
+        CONNECT WITH US
+      </p>
 
-          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
-            {[
-              { icon: Twitter, label: "Twitter" },
-              { icon: Github, label: "GitHub" },
-              { icon: Youtube, label: "YouTube" },
-              { icon: Linkedin, label: "LinkedIn" },
-              { icon: Instagram, label: "Instagram" },
-            ].map((item) => {
-              const Icon = item.icon;
-              return (
-                <a
-                  key={item.label}
-                  href="#"
-                  className="group flex items-center justify-center rounded-[28px] border border-white/10 bg-[#0c0c0f]/85 p-5 text-white transition duration-300 hover:-translate-y-0.5 hover:border-[#ff1f45]/30 hover:bg-[#12050d]/95 hover:shadow-[0_22px_70px_rgba(255,0,69,0.18)]"
-                >
-                  <div className="flex flex-col items-center gap-3">
-                    <span className="flex h-12 w-12 items-center justify-center rounded-3xl bg-[#14040a]/90 text-[#ff1f45] shadow-[0_0_24px_rgba(255,0,69,0.18)] transition duration-300 group-hover:scale-105">
-                      <Icon className="h-5 w-5" />
-                    </span>
-                    <span className="text-sm uppercase tracking-[0.18em] text-white/80">
-                      {item.label}
-                    </span>
-                  </div>
-                </a>
-              );
-            })}
-          </div>
-        </div>
-      </section>
+      <h2 className="mt-4 text-3xl font-black uppercase tracking-[-0.03em] text-white sm:text-4xl">
+        Follow us for the latest updates and announcements.
+      </h2>
+
+      <p className="mt-4 max-w-2xl text-sm leading-7 text-white/70">
+        Stay connected with UNI6CTF across every social channel and never
+        miss a community alert or challenge drop.
+      </p>
+    </div>
+
+    <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
+      {[
+        {
+          icon: Twitter,
+          label: "Twitter",
+          href: "https://twitter.com/",
+        },
+        {
+          icon: Github,
+          label: "GitHub",
+          href: "https://github.com/madhuresh453",
+        },
+        {
+          icon: Youtube,
+          label: "YouTube",
+          href: "https://youtube.com/",
+        },
+        {
+          icon: Linkedin,
+          label: "LinkedIn",
+          href: "https://linkedin.com/",
+        },
+        {
+          icon: Instagram,
+          label: "Instagram",
+          href: "https://instagram.com/",
+        },
+      ].map((item) => {
+        const Icon = item.icon;
+
+        return (
+          <a
+            key={item.label}
+            href={item.href}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="group flex items-center justify-center rounded-[28px] border border-white/10 bg-[#0c0c0f]/85 p-5 text-white transition duration-300 hover:-translate-y-1 hover:border-[#ff1f45]/40 hover:bg-[#12050d]/95 hover:shadow-[0_22px_70px_rgba(255,0,69,0.18)]"
+          >
+            <div className="flex flex-col items-center gap-3">
+              
+              <span className="flex h-12 w-12 items-center justify-center rounded-3xl bg-[#14040a]/90 text-[#ff1f45] shadow-[0_0_24px_rgba(255,0,69,0.18)] transition duration-300 group-hover:scale-110 group-hover:text-white">
+                <Icon className="h-5 w-5" />
+              </span>
+
+              <span className="text-sm uppercase tracking-[0.18em] text-white/80 transition duration-300 group-hover:text-[#ff4d6d]">
+                {item.label}
+              </span>
+
+            </div>
+          </a>
+        );
+      })}
+    </div>
+  </div>
+</section>
 
       <section className="grid gap-6 lg:grid-cols-2">
         <div className="rounded-[32px] border border-white/10 bg-[#080808]/95 p-8 shadow-[0_35px_100px_rgba(0,0,0,0.18)]">
