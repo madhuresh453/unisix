@@ -42,15 +42,15 @@ export const navLinks = [
 
 export const events = [
   {
-    id: "uni6ctf-global",
+    id: "ctf4-cyber-challenge",
 
-    slug: "uni6ctf-global",
+    slug: "ctf4-cyber-challenge",
 
-    name: "UNI6CTF GLOBAL",
+    name: "ctf4 cyber challenge",
 
-    title: "UNI6CTF GLOBAL",
+    title: "ctf4-cyber-challenge",
 
-    status: "live",
+    status: "UPCOMING, LIVE ON 15 MAY",
 
     difficulty: "Hard",
 
@@ -58,7 +58,7 @@ export const events = [
       "A 24-hour university-grade cyber range covering web exploitation, cloud pivots, cryptanalysis, memory forensics, and reverse engineering.",
 
     longDescription:
-      "UNI6CTF GLOBAL is an advanced cybersecurity competition focused on real-world offensive and defensive security challenges. Participants compete across web exploitation, reverse engineering, binary exploitation, cryptography, digital forensics, cloud attacks, and OSINT investigations.",
+      "ctf4-cyber-challenge is an advanced cybersecurity competition focused on real-world offensive and defensive security challenges. Participants compete across web exploitation, reverse engineering, binary exploitation, cryptography, digital forensics, cloud attacks, and OSINT investigations.",
 
     startsAt: "2026-05-15T12:00:00.000Z",
 
@@ -88,7 +88,7 @@ export const events = [
 
     format: "Jeopardy",
 
-    location: "Online",
+    location: "Hasan Kalyoncu University, TURKEY",
 
     registrationOpen: true,
 
@@ -115,73 +115,7 @@ export const events = [
     ],
   },
 
-  {
-    id: "ctf4-cyber-challenge",
-
-    slug: "ctf4-cyber-challenge",
-
-    name: "CTF4 CYBER CHALLENGE",
-
-    title: "CTF4 CYBER CHALLENGE",
-
-    status: "upcoming",
-
-    difficulty: "Med-Hard",
-
-    description:
-      "Dive into Capture The Flag challenges and test your hacking skills.",
-
-    longDescription:
-      "CTF4 Cyber Challenge is a competitive cybersecurity event designed for hackers, students, and professionals to test their practical offensive security skills.",
-
-    startsAt: "2026-05-15T12:00:00.000Z",
-
-    endsAt: "2026-05-16T12:00:00.000Z",
-
-    duration: "24 Hours",
-
-    statusLabel: "Upcoming",
-
-    teams: "200+ Teams",
-
-    players: "200+ Players",
-
-    participants: 1400,
-
-    difficultyLevel: "Med-Hard",
-
-    image:
-      "https://images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format&fit=crop&w=1900&q=80",
-
-    banner:
-      "https://images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format&fit=crop&w=1900&q=80",
-
-    prizePool: "$4,000+",
-
-    prize: "$4,000",
-
-    format: "Jeopardy",
-
-    location: "Online",
-
-    registrationOpen: true,
-
-    categories: [
-      "Web",
-      "Crypto",
-      "Pwn",
-      "Forensics",
-      "OSINT",
-    ],
-
-    tags: [
-      "Cybersecurity",
-      "CTF",
-      "Ethical Hacking",
-    ],
-
-    winners: [],
-  },
+ 
 
   {
     id: "redline-2026",

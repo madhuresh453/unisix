@@ -21,33 +21,13 @@ const scoreboard = [
 
 const pastRows = [
   {
-    event: "UNI6CTF 2025 Quals",
-    duration: "24 Hours",
-    participants: "2,153",
-    winners: "Ethereal Hackers",
-    date: "Apr 20 - Apr 21, 2025",
-  },
-  {
-    event: "Spring Breach CTF",
-    duration: "24 Hours",
-    participants: "1,784",
-    winners: "Cypher Knights",
-    date: "Mar 16 - Mar 17, 2025",
-  },
-  {
-    event: "LockDown CTF",
-    duration: "24 Hours",
-    participants: "1,512",
-    winners: "pwn4fun",
-    date: "Feb 24 - Feb 25, 2025",
-  },
-  {
-    event: "Winter Warzone CTF",
-    duration: "24 Hours",
-    participants: "1,256",
-    winners: "0xDeadBeef",
-    date: "Jan 20 - Jan 21, 2025",
-  },
+    event: "UNI6CTF 1.0",
+    duration: "6 Hours",
+    participants: "750+",
+    winners: "PBKS",
+    date: "Apr 4 2026",
+  }
+  
 ];
 
 export default function CTFPage() {
@@ -99,7 +79,7 @@ export default function CTFPage() {
               className="group relative flex items-center justify-center gap-3 border-r border-white/10 bg-black/50 py-5 text-[#ff1f45] transition-all duration-300"
             >
               <Radio className="h-5 w-5" />
-              Live CTF
+              Registration Open
 
               <span className="absolute inset-x-0 bottom-0 h-[2px] bg-[#ff003c] shadow-[0_0_18px_rgba(255,0,60,0.8)]" />
             </Link>
@@ -126,7 +106,7 @@ export default function CTFPage() {
             <div>
               <div className="mb-5 flex items-center gap-3 text-2xl font-bold uppercase tracking-[0.08em]">
                 <span className="h-2.5 w-2.5 rounded-full bg-[#ff003c]" />
-                Live CTF
+                Registration Open
               </div>
 
               <div className="grid gap-6 lg:grid-cols-[1.6fr_0.8fr]">
@@ -145,24 +125,24 @@ export default function CTFPage() {
 
                     <div className="p-6 md:p-8">
                       <span className="inline-flex rounded-md bg-[#0e2f17] px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em] text-[#6dff91]">
-                        Live
+                        Registration Open
                       </span>
 
                       <h2 className="mt-3 font-teko text-6xl uppercase leading-[0.85] tracking-[0.01em] text-white">
-                        UNI6CTF GLOBAL
+                        CTF 4 CYBER CHALLENGE
                       </h2>
 
-                      <p className="mt-3 text-white/75">ONLINE</p>
+                      <p className="mt-3 text-white/75">Hasan Kalyoncu University, TURKEY</p>
 
                       <div className="mt-6 grid gap-3 text-sm text-white/70 sm:grid-cols-3">
                         <span className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 text-[#ff1f45]" />
-                          Live
+                          15 MAY
                         </span>
 
                         <span className="flex items-center gap-2">
                           <Clock3 className="h-4 w-4 text-[#ff1f45]" />
-                          24/7 Hours
+                          24 HOURS
                         </span>
 
                         <span className="flex items-center gap-2">

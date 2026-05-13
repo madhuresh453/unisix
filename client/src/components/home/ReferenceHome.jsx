@@ -213,7 +213,7 @@ export function ReferenceHome() {
             <div>
               <p className="flex items-center gap-2 text-[14px] font-black uppercase tracking-[0.14em] text-cyber-red text-red-glow">
                 <span className="h-3 w-3 rounded-full bg-cyber-red shadow-glow" />
-                Live Now
+                Registration Open
               </p>
               <h2 className="mt-5 font-cyber-title text-[28px] font-black uppercase leading-none tracking-[0.07em] text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.25)] sm:text-[36px]">
                 {liveEvent.name}
