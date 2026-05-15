@@ -7,7 +7,7 @@ export default function LeaderboardPage() {
     <PageShell className="grid gap-8">
       <SectionHeader
         eyebrow="Leaderboard"
-        title="Global, team, and country rankings"
+        title="CTF4 CYBER CHALLENGE - TURKEY"
         body="Rankings update from accepted submissions and can be streamed during live events."
       />
       <LeaderboardPanel />
