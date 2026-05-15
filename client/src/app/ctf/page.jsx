@@ -26,6 +26,8 @@ const scoreboard = [
 
 const pastRows = [
   {
+    id: "uni6ctf-1",
+    slug: "uni6ctf-1",
     event: "UNI6CTF 1.0",
     duration: "6 Hours",
     participants: "750+",
@@ -376,7 +378,7 @@ export default function CTFPage() {
 
                         <td className="px-5 py-4 text-right">
                           <Link
-                            href="/leaderboard"
+                            href={`/ctf/${row.slug || row.id}`}
                             className="inline-flex rounded-md border border-white/30 px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition-all duration-300 hover:border-[#ff1f45]/70"
                           >
                             View Details

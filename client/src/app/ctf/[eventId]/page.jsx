@@ -13,6 +13,10 @@ import {
 import { events } from "@/utils/constants";
 import { formatDateTime } from "@/utils/formatters";
 import { CountdownTimer } from "@/components/CountdownTimer";
+import { EventHero } from "@/components/ctf/EventHero";
+import { ArchivedScoreboard } from "@/components/ctf/ArchivedScoreboard";
+import { LiveScoreboard } from "@/components/ctf/LiveScoreboard";
+import { resolveEventData } from "@/lib/eventResolver";
 
 export default async function EventDetailsPage({ params }) {
   // NEXT JS 15 FIX
@@ -30,9 +34,15 @@ export default async function EventDetailsPage({ params }) {
     notFound();
   }
 
-  const isLive = event.status === "live";
-  const isUpcoming = event.status === "upcoming";
-  const isPast = event.status === "past";
+  const resolvedEventData = await resolveEventData(eventId);
+  const isLive = resolvedEventData.isLive;
+  const isPast = resolvedEventData.isPast;
+  const isUpcoming = !isLive && !isPast;
+
+  const archiveData = resolvedEventData.archive || null;
+  const archiveRows = resolvedEventData.rows || [];
+  const archiveError = resolvedEventData.error || "";
+  const archiveDate = archiveData?.date || `${formatDateTime(event.startsAt)} - ${formatDateTime(event.endsAt)}`;
 
   return (
     <main className="bg-[#050505] text-white min-h-screen">
@@ -165,6 +175,29 @@ export default async function EventDetailsPage({ params }) {
           status={event.status}
         />
       </section>
+
+      {/* PAST EVENT ARCHIVE */}
+      {isPast ? (
+        <section className="mx-auto w-full max-w-[1400px] px-6 pb-12">
+          <div className="space-y-6">
+            <EventHero
+              title={archiveData?.event || event.name}
+              description={archiveData?.description || event.longDescription || event.description}
+              date={archiveDate}
+              duration={archiveData?.duration || event.duration}
+              participants={archiveData?.participants || event.participants}
+              winners={archiveData?.winners || event.winners}
+            />
+            <ArchivedScoreboard eventTitle={archiveData?.event || event.name} rows={archiveRows} error={archiveError} />
+          </div>
+        </section>
+      ) : null}
+
+      {isLive ? (
+        <section className="mx-auto w-full max-w-[1400px] px-6 pb-12">
+          <LiveScoreboard eventId={event.id} source="api" />
+        </section>
+      ) : null}
 
       {/* MAIN CONTENT */}
       <section className="mx-auto w-full max-w-[1400px] px-6 pb-20">

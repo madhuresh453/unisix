@@ -71,7 +71,7 @@ export default function PastCTFPage() {
                     <td className="px-5 py-4 text-white/70">{event.duration}</td>
                     <td className="px-5 py-4 text-white/70">{event.participants}</td>
                     <td className="px-5 py-4 text-white/70">{event.winners.join(", ")}</td>
-                    <td className="px-5 py-4 text-right"><Link href={`/ctf/${event.id}`} className="inline-flex rounded-md border border-white/30 px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition-all duration-300 hover:border-[#ff1f45]/70">View Details</Link></td>
+                    <td className="px-5 py-4 text-right"><Link href={`/ctf/${event.slug || event.id}`} className="inline-flex rounded-md border border-white/30 px-4 py-2 text-xs font-semibold uppercase tracking-[0.08em] transition-all duration-300 hover:border-[#ff1f45]/70">View Details</Link></td>
                   </tr>
                 ))}
               </tbody>

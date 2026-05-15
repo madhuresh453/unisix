@@ -113,6 +113,8 @@ export const events = [
       "announced after result",
       "announced after result",
     ],
+
+    scoreboardSource: "ctfd-live",
   },
 
  
@@ -320,6 +322,81 @@ export const events = [
       "0xCoffee",
       "Stack Smashers",
     ],
+
+    archiveFile: "winter-hunt-2025.json",
+  },
+
+  {
+    id: "uni6ctf-1",
+
+    slug: "uni6ctf-1",
+
+    name: "UNI6CTF 1.0",
+
+    title: "UNI6CTF 1.0",
+
+    status: "past",
+
+    difficulty: "Intermediate",
+
+    description:
+      "The first UNI6CTF event featuring web, crypto, pwn, and forensic challenge tracks for universities worldwide.",
+
+    longDescription:
+      "UNI6CTF 1.0 marked the launch of the UNI6CTF competitive ecosystem, bringing teams together for a six-hour cyber battle across practical offensive and defensive categories.",
+
+    startsAt: "2026-04-04T12:00:00.000Z",
+
+    endsAt: "2026-04-04T18:00:00.000Z",
+
+    duration: "6 Hours",
+
+    statusLabel: "Completed",
+
+    teams: "750 Teams",
+
+    players: "750 Teams",
+
+    participants: 750,
+
+    difficultyLevel: "Intermediate",
+
+    image:
+      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1000&q=80",
+
+    banner:
+      "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?auto=format&fit=crop&w=1900&q=80",
+
+    prizePool: "$1000+",
+
+    prize: "$1,000",
+
+    format: "Jeopardy",
+
+    location: "Online",
+
+    registrationOpen: false,
+
+    categories: [
+      "Web",
+      "Crypto",
+      "Pwn",
+      "Forensics",
+    ],
+
+    tags: [
+      "CTF",
+      "Cybersecurity",
+      "University",
+    ],
+
+    winners: [
+      "PBKS",
+      "NullByteCrew",
+      "HexHunters",
+    ],
+
+    archiveFile: "uni6ctf-1.csv",
   },
 
   {

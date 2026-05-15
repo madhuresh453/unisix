@@ -1,0 +1,68 @@
+{
+  "event": "Winter Hunt Invitational",
+  "description": "Archive results from the Winter Hunt Invitational featuring OSINT, forensics, and web exploitation tracks.",
+  "date": "Dec 8 2025 - Dec 9 2025",
+  "duration": "24 Hours",
+  "participants": 1188,
+  "winners": ["Red Vectors", "0xCoffee", "Stack Smashers"],
+  "teams": [
+    {
+      "rank": 1,
+      "team": "Red Vectors",
+      "country": "India",
+      "score": 7420,
+      "points": 7420,
+      "members": [
+        { "name": "Madhuresh", "username": "rootx", "email": "rootx@example.com" },
+        { "name": "Ankit Verma", "username": "pwnlord", "email": "ankit@example.com" },
+        { "name": "Rhea Nair", "username": "forensicfox", "email": "rhea@example.com" }
+      ]
+    },
+    {
+      "rank": 2,
+      "team": "0xCoffee",
+      "country": "Turkey",
+      "score": 7010,
+      "points": 7010,
+      "members": [
+        { "name": "Omer Kaya", "username": "brewsec", "email": "omer@example.com" },
+        { "name": "Dilara Sen", "username": "hexnova", "email": "dilara@example.com" }
+      ]
+    },
+    {
+      "rank": 3,
+      "team": "Stack Smashers",
+      "country": "United States",
+      "score": 6895,
+      "points": 6895,
+      "members": [
+        { "name": "Jade Miller", "username": "jadebyte", "email": "jade@example.com" },
+        { "name": "Noah Price", "username": "offsetzero", "email": "noah@example.com" },
+        { "name": "Kai Brooks", "username": "segfaultkai", "email": "kai@example.com" }
+      ]
+    },
+    {
+      "rank": 4,
+      "team": "Cipher Syndicate",
+      "country": "Germany",
+      "score": 6400,
+      "points": 6400,
+      "members": [
+        { "name": "Lena Roth", "username": "cryptolena", "email": "lena@example.com" },
+        { "name": "Tim Falk", "username": "timfalk", "email": "tim@example.com" }
+      ]
+    },
+    {
+      "rank": 5,
+      "team": "Packet Pirates",
+      "country": "Brazil",
+      "score": 6210,
+      "points": 6210,
+      "members": [
+        { "name": "Rafael Costa", "username": "rafsec", "email": "rafael@example.com" },
+        { "name": "Luisa Moraes", "username": "luisabyte", "email": "luisa@example.com" },
+        { "name": "Bruno Alves", "username": "b4lves", "email": "bruno@example.com" }
+      ]
+    }
+  ]
+}
