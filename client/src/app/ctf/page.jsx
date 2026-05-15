@@ -12,11 +12,16 @@ import { events } from "@/utils/constants";
 import { CountdownTimer } from "@/components/CountdownTimer";
 
 const scoreboard = [
-  { rank: 1, team: "PBKS", score: 9850 },
-  { rank: 2, team: "Cypher Knights", score: 8720 },
-  { rank: 3, team: "The Exploiters", score: 7410 },
-  { rank: 4, team: "pwn4fun", score: 6120 },
-  { rank: 5, team: "0xDeadBeef", score: 5890 },
+  { rank: 1, team: "xxxx", score: 1 },
+  { rank: 2, team: "xxxx", score: 2 },
+  { rank: 3, team: "xxxx", score: 3 },
+  { rank: 4, team: "xxxx", score: 4 },
+  { rank: 5, team: "xxxx", score: 5 },
+  { rank: 6, team: "xxxx", score: 6 },
+  { rank: 7, team: "xxxx", score: 7 },
+  { rank: 8, team: "xxxx", score: 8 },
+  { rank: 9, team: "xxxx", score: 9 },
+  { rank: 10, team: "xxxx", score: 10 },
 ];
 
 const pastRows = [
@@ -115,7 +120,7 @@ export default function CTFPage() {
                   <div className="grid md:grid-cols-[0.95fr_1.25fr]">
                     <div className="relative min-h-[290px] overflow-hidden">
                       <img
-                        src="https://images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format&fit=crop&w=900&q=80"
+                        src="images/ctfpage.jpg"
                         alt="Live CTF"
                         className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                       />

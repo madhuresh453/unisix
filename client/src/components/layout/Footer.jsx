@@ -47,36 +47,40 @@ function Footer() {
             {/* SOCIAL ICONS */}
             <div className="mt-7 flex gap-5 text-white/80">
               <Link
-                href="/contact"
-                aria-label="Community"
-                className="transition-all duration-300 hover:text-cyber-red hover:drop-shadow-[0_0_10px_rgba(255,0,0,0.5)]"
-              >
-                <MessageCircle className="h-4 w-4" />
-              </Link>
+  href="https://chat.whatsapp.com/GyGwHsJdKHNCb6Bo5VHSgi"
+  target="_blank"
+  aria-label="Community"
+  className="transition-all duration-300 hover:text-cyber-red hover:drop-shadow-[0_0_10px_rgba(255,0,0,0.5)]"
+>
+  <MessageCircle className="h-4 w-4" />
+</Link>
 
               <Link
-                href="/contact"
-                aria-label="Twitter"
-                className="transition-all duration-300 hover:text-cyber-red hover:drop-shadow-[0_0_10px_rgba(255,0,0,0.5)]"
-              >
-                <Twitter className="h-4 w-4" />
-              </Link>
+  href="https://discord.gg/C5mV5SHMZ"
+  target="_blank"
+  aria-label="Discord"
+  className="transition-all duration-300 hover:text-cyber-red hover:drop-shadow-[0_0_10px_rgba(255,0,0,0.5)]"
+>
+  <MessageCircle className="h-4 w-4" />
+</Link>
 
               <Link
-                href="/contact"
-                aria-label="GitHub"
-                className="transition-all duration-300 hover:text-cyber-red hover:drop-shadow-[0_0_10px_rgba(255,0,0,0.5)]"
-              >
-                <Github className="h-4 w-4" />
-              </Link>
+  href="https://www.linkedin.com/in/madhuresh453"
+  target="_blank"
+  aria-label="LinkedIn"
+  className="transition-all duration-300 hover:text-cyber-red hover:drop-shadow-[0_0_10px_rgba(255,0,0,0.5)]"
+>
+  <Linkedin className="h-4 w-4" />
+</Link>
 
               <Link
-                href="/contact"
-                aria-label="LinkedIn"
-                className="transition-all duration-300 hover:text-cyber-red hover:drop-shadow-[0_0_10px_rgba(255,0,0,0.5)]"
-              >
-                <Linkedin className="h-4 w-4" />
-              </Link>
+  href="https://wa.me/916239015723"
+  target="_blank"
+  aria-label="WhatsApp"
+  className="transition-all duration-300 hover:text-cyber-red hover:drop-shadow-[0_0_10px_rgba(255,0,0,0.5)]"
+>
+  <MessageCircle className="h-4 w-4" />
+</Link>
 
               <Link
                 href="/contact"

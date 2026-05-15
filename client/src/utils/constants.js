@@ -60,9 +60,9 @@ export const events = [
     longDescription:
       "ctf4-cyber-challenge is an advanced cybersecurity competition focused on real-world offensive and defensive security challenges. Participants compete across web exploitation, reverse engineering, binary exploitation, cryptography, digital forensics, cloud attacks, and OSINT investigations.",
 
-    startsAt: "2026-05-15T12:00:00.000Z",
+    startsAt: "2026-05-15T19:30:00+05:30",
 
-    endsAt: "2026-05-16T15:00:00.000Z",
+    endsAt: "2026-05-16T19:30:00+05:30",
 
     duration: "24 Hours",
 
@@ -82,9 +82,9 @@ export const events = [
     banner:
       "https://images.unsplash.com/photo-1518773553398-650c184e0bb3?auto=format&fit=crop&w=1900&q=80",
 
-    prizePool: "$3000+",
+    prizePool: "50000+",
 
-    prize: "$3,000",
+    prize: "To be announce",
 
     format: "Jeopardy",
 
@@ -109,9 +109,9 @@ export const events = [
     ],
 
     winners: [
-      "nullsec labs",
-      "ByteBreach",
-      "Packet Pilots",
+      "announced after result",
+      "announced after result",
+      "announced after result",
     ],
   },
 
