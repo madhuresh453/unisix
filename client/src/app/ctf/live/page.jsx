@@ -8,11 +8,14 @@ import {
   Trophy,
   Users
 } from "lucide-react";
-import { events } from "@/utils/constants";
+import { fetchCms } from "@/lib/cmsApi";
+import { mapCtfToCard } from "@/lib/ctfMapper";
 import { formatDateTime } from "@/utils/formatters";
 import { CountdownTimer } from "@/components/CountdownTimer";
 
-export default function LiveCTFPage() {
+export default async function LiveCTFPage() {
+  const ctfRes = await fetchCms("/ctfs?status=live&limit=100");
+  const events = (ctfRes?.ctfs || []).map(mapCtfToCard);
   const liveEvents = events.filter((event) => event.status === "live");
 
   return (

@@ -1,22 +1,21 @@
 import { Router } from "express";
 import authRoutes from "./authRoutes.js";
 import challengeRoutes from "./challengeRoutes.js";
+import contentRoutes from "./contentRoutes.js";
 import ctfRoutes from "./ctfRoutes.js";
 import leaderboardRoutes from "./leaderboardRoutes.js";
 import sponsorRoutes from "./sponsorRoutes.js";
 import submissionRoutes from "./submissionRoutes.js";
 import userRoutes from "./userRoutes.js";
 import writeupRoutes from "./writeupRoutes.js";
+import adminRoutes from "./adminRoutes.js";
+import { diagnosticsStatus, healthStatus } from "../controllers/opsController.js";
 
 const router = Router();
 
-router.get("/health", (req, res) => {
-  res.json({
-    status: "ok",
-    service: "uni6ctf-api",
-    uptime: process.uptime()
-  });
-});
+router.get("/health", healthStatus);
+router.get("/health/diagnostics", diagnosticsStatus);
+router.get("/ops/diagnostics", diagnosticsStatus);
 
 router.use("/auth", authRoutes);
 router.use("/users", userRoutes);
@@ -26,5 +25,7 @@ router.use("/submissions", submissionRoutes);
 router.use("/leaderboard", leaderboardRoutes);
 router.use("/writeups", writeupRoutes);
 router.use("/sponsors", sponsorRoutes);
+router.use("/content", contentRoutes);
+router.use("/admin", adminRoutes);
 
 export default router;

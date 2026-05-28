@@ -8,7 +8,8 @@ import {
   Users,
 } from "lucide-react";
 
-import { events } from "@/utils/constants";
+import { fetchCms } from "@/lib/cmsApi";
+import { mapCtfToCard } from "@/lib/ctfMapper";
 import { CountdownTimer } from "@/components/CountdownTimer";
 
 const scoreboard = [
@@ -24,23 +25,23 @@ const scoreboard = [
   { rank: 10, team: "xxxx", score: 10 },
 ];
 
-const pastRows = [
-  {
-    id: "uni6ctf-1",
-    slug: "uni6ctf-1",
-    event: "UNI6CTF 1.0",
-    duration: "6 Hours",
-    participants: "750+",
-    winners: "PBKS",
-    date: "Apr 4 2026",
-  }
-  
-];
-
-export default function CTFPage() {
-  const liveEvent =
-    events.find((event) => event.status === "live") || events[0];
+export default async function CTFPage() {
+  const ctfRes = await fetchCms("/ctfs?limit=200");
+  const events = (ctfRes?.ctfs || []).map(mapCtfToCard);
+  const liveEvent = events.find((event) => event.status === "live") || events[0] || mapCtfToCard({});
   const upcomingEvents = events.filter((event) => event.status === "upcoming").slice(0, 3);
+  const pastRows = events
+    .filter((event) => event.status === "past")
+    .slice(0, 8)
+    .map((event) => ({
+      id: event.id,
+      slug: event.slug,
+      event: event.name,
+      duration: event.duration,
+      participants: event.participants ? String(event.participants) : "0",
+      winners: event.winners?.[0] || "-",
+      date: new Date(event.startsAt).toLocaleDateString("en", { month: "short", day: "numeric", year: "numeric" })
+    }));
 
   return (
     <main className="bg-[#050505] text-white min-h-screen">

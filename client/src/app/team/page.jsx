@@ -5,8 +5,9 @@ import { TeamMemberCard } from "@/components/team/TeamMemberCard";
 import { JoinTeamCTA } from "@/components/team/JoinTeamCTA";
 import { TeamFooter } from "@/components/team/TeamFooter";
 import { PageShell } from "@/components/ui/PageShell";
+import { fetchCms } from "@/lib/cmsApi";
 
-const coreTeam = [
+const defaultCoreTeam = [
   {
     name: "Krish Pathania",
     title: "Co-Founder & Chief Operating Officer",
@@ -39,7 +40,7 @@ const coreTeam = [
   }
 ];
 
-const developers = [
+const defaultDevelopers = [
   {
     name: "Madhuresh Kumar Jha",
     title: "Software Lead & PURPLE TEAMING",
@@ -72,7 +73,7 @@ const developers = [
   }
 ];
 
-const researchers = [
+const defaultResearchers = [
   {
     name: "Raj Kumar",
     title: "Senior Researcher",
@@ -90,7 +91,7 @@ const researchers = [
   }
 ];
 
-const organizers = [
+const defaultOrganizers = [
   {
     name: "IN-0x0",
     title: "Event ORGANIZER",
@@ -108,7 +109,18 @@ const organizers = [
   }
 ];
 
-export default function TeamPage() {
+export default async function TeamPage() {
+  const teamRes = await fetchCms("/content/team");
+  const members = Array.isArray(teamRes?.members) ? teamRes.members : [];
+  const coreTeam = members.filter((member) => member.group === "core");
+  const developers = members.filter((member) => member.group === "developers");
+  const researchers = members.filter((member) => member.group === "researchers");
+  const organizers = members.filter((member) => member.group === "organizers");
+
+  const safeCoreTeam = coreTeam.length ? coreTeam : defaultCoreTeam;
+  const safeDevelopers = developers.length ? developers : defaultDevelopers;
+  const safeResearchers = researchers.length ? researchers : defaultResearchers;
+  const safeOrganizers = organizers.length ? organizers : defaultOrganizers;
   return (
     <PageShell className="grid gap-16 pb-20">
       <TeamHero />
@@ -116,8 +128,8 @@ export default function TeamPage() {
 
       <TeamSection title="CORE TEAM" description="Senior directors, squad leads, and threat architects.">
         <div className="grid gap-6 sm:grid-cols-2 xl:grid-cols-5">
-          {coreTeam.map((member) => (
-            <TeamMemberCard key={member.name} {...member} socials={[
+          {safeCoreTeam.map((member) => (
+            <TeamMemberCard key={member.name} {...member} socials={member.socials?.length ? member.socials : [
               { type: "github", href: "#" },
               { type: "linkedin", href: "#" },
               { type: "discord", href: "#" },
@@ -129,8 +141,8 @@ export default function TeamPage() {
 
       <TeamSection title="DEVELOPERS" description="Engineering the platform, tooling, and user experience for elite operations.">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          {developers.map((member) => (
-            <TeamMemberCard key={member.name} {...member} socials={[
+          {safeDevelopers.map((member) => (
+            <TeamMemberCard key={member.name} {...member} socials={member.socials?.length ? member.socials : [
               { type: "github", href: "#" },
               { type: "linkedin", href: "#" },
               { type: "website", href: "#" }
@@ -141,8 +153,8 @@ export default function TeamPage() {
 
       <TeamSection title="SECURITY RESEARCHERS" description="Focused experts in cryptography, exploitation, and defensive analysis.">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {researchers.map((member) => (
-            <TeamMemberCard key={member.name} {...member} socials={[
+          {safeResearchers.map((member) => (
+            <TeamMemberCard key={member.name} {...member} socials={member.socials?.length ? member.socials : [
               { type: "github", href: "#" },
               { type: "linkedin", href: "#" },
               { type: "website", href: "#" }
@@ -153,8 +165,8 @@ export default function TeamPage() {
 
       <TeamSection title="ORGANIZERS" description="The event and community operators driving every UNI6CTF campaign.">
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {organizers.map((member) => (
-            <TeamMemberCard key={member.name} {...member} socials={[
+          {safeOrganizers.map((member) => (
+            <TeamMemberCard key={member.name} {...member} socials={member.socials?.length ? member.socials : [
               { type: "linkedin", href: "#" },
               { type: "website", href: "#" }
             ]} />

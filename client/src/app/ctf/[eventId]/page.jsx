@@ -10,7 +10,8 @@ import {
   Users,
 } from "lucide-react";
 
-import { events } from "@/utils/constants";
+import { fetchCms } from "@/lib/cmsApi";
+import { mapCtfToCard } from "@/lib/ctfMapper";
 import { formatDateTime } from "@/utils/formatters";
 import { CountdownTimer } from "@/components/CountdownTimer";
 import { EventHero } from "@/components/ctf/EventHero";
@@ -21,12 +22,13 @@ import { resolveEventData } from "@/lib/eventResolver";
 export default async function EventDetailsPage({ params }) {
   // NEXT JS 15 FIX
   const { eventId } = await params;
+  const ctfRes = await fetchCms("/ctfs?limit=400");
+  const events = (ctfRes?.ctfs || []).map(mapCtfToCard);
 
   // SUPPORT BOTH ID + SLUG
   const event = events.find(
     (e) =>
-      e.slug === eventId ||
-      e.id === eventId
+      e.slug === eventId || String(e.id) === String(eventId)
   );
 
   // NOT FOUND

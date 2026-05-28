@@ -11,10 +11,14 @@ function challengeFilter(value) {
 
 export const listChallenges = asyncHandler(async (req, res) => {
   const { limit, skip, page } = pagination(req.query);
+  const elevatedRoles = new Set(["admin", "super_admin", "content_manager", "moderator"]);
+  const canSeeDrafts = elevatedRoles.has(req.user?.role);
   const filter = {
-    isPublished: req.user?.role === "admin" ? { $in: [true, false] } : true,
+    isPublished: canSeeDrafts ? { $in: [true, false] } : true,
     ...(req.query.category ? { category: req.query.category } : {}),
-    ...(req.query.ctf ? { ctf: req.query.ctf } : {})
+    ...(req.query.ctf ? { ctf: req.query.ctf } : {}),
+    ...(req.query.status ? { status: req.query.status } : {}),
+    ...(req.query.search ? { title: { $regex: req.query.search, $options: "i" } } : {})
   };
 
   const [challenges, total] = await Promise.all([
@@ -59,6 +63,15 @@ export const createChallenge = asyncHandler(async (req, res) => {
     tags: req.body.tags || [],
     hints: req.body.hints || [],
     attachments: req.body.attachments || [],
+    dockerUrl: req.body.dockerUrl || "",
+    instanceUrl: req.body.instanceUrl || "",
+    status: req.body.status || (req.body.isPublished ? "published" : "draft"),
+    visibility: req.body.visibility || "public",
+    featured: Boolean(req.body.featured),
+    scheduledReleaseAt: req.body.scheduledReleaseAt || null,
+    order: Number(req.body.order || 0),
+    flagType: req.body.flagType || "static",
+    flagRegex: req.body.flagRegex || "",
     isPublished: Boolean(req.body.isPublished)
   });
 
@@ -67,6 +80,31 @@ export const createChallenge = asyncHandler(async (req, res) => {
   }
 
   res.status(201).json({ challenge: sanitizeChallenge(challenge) });
+});
+
+export const updateChallenge = asyncHandler(async (req, res) => {
+  const challenge = await Challenge.findOne(challengeFilter(req.params.challengeId)).select("+flagHash +flagSalt");
+  if (!challenge) return res.status(404).json({ message: "Challenge not found." });
+
+  if (req.body.flag) {
+    const { flagHash, flagSalt } = createFlagHash(req.body.flag);
+    challenge.flagHash = flagHash;
+    challenge.flagSalt = flagSalt;
+  }
+
+  Object.assign(challenge, {
+    ...req.body,
+    status: req.body.status || challenge.status
+  });
+
+  await challenge.save();
+  res.json({ challenge: sanitizeChallenge(challenge) });
+});
+
+export const deleteChallenge = asyncHandler(async (req, res) => {
+  const challenge = await Challenge.findOneAndDelete(challengeFilter(req.params.challengeId));
+  if (!challenge) return res.status(404).json({ message: "Challenge not found." });
+  res.status(204).send();
 });
 
 export const unlockHint = asyncHandler(async (req, res) => {

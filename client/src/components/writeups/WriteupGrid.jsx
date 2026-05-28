@@ -1,14 +1,9 @@
 import Link from "next/link";
 import { Search } from "lucide-react";
 
-import {
-  categories,
-  writeups,
-} from "@/utils/constants";
-
 import { Badge } from "@/components/ui/Badge";
 
-function WriteupGrid() {
+function WriteupGrid({ categories = [], writeups = [] }) {
   const safeCategories = categories || [];
   const safeWriteups = writeups || [];
 

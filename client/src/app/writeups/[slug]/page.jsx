@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Badge } from "@/components/ui/Badge";
 import { PageShell } from "@/components/ui/PageShell";
 
-import { writeups } from "@/utils/constants";
+import { fetchCms } from "@/lib/cmsApi";
 import { formatDate } from "@/utils/formatters";
 
 export default async function WriteupDetailPage({
@@ -12,13 +12,14 @@ export default async function WriteupDetailPage({
   // NEXT JS 15 FIX
   const { slug } = await params;
 
-  // SAFE WRITEUPS
-  const safeWriteups = writeups || [];
-
-  // FIND WRITEUP
-  const writeup = safeWriteups.find(
-    (item) => item.slug === slug
-  );
+  const response = await fetchCms(`/writeups/${slug}`);
+  const writeup = response?.writeup
+    ? {
+        ...response.writeup,
+        author: response.writeup.author?.name || response.writeup.author?.handle || "Anonymous",
+        readTime: response.writeup.readTime || "5 min read"
+      }
+    : null;
 
   // NOT FOUND
   if (!writeup) {

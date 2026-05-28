@@ -8,7 +8,11 @@ function sanitizeValue(value) {
   }
 
   if (value && typeof value === "object") {
-    return Object.fromEntries(Object.entries(value).map(([key, item]) => [key, sanitizeValue(item)]));
+    return Object.fromEntries(
+      Object.entries(value)
+        .filter(([key]) => !key.startsWith("$") && !key.includes("."))
+        .map(([key, item]) => [key, sanitizeValue(item)])
+    );
   }
 
   return value;

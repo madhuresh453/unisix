@@ -1,5 +1,6 @@
 import { User } from "../models/User.js";
 import { verifyToken } from "../utils/token.js";
+import { getRolePermissions } from "../security/rbac.js";
 
 export async function requireAuth(req, res, next) {
   try {
@@ -31,5 +32,16 @@ export function requireRole(...roles) {
     }
 
     return next();
+  };
+}
+
+export function requirePermission(...permissions) {
+  return (req, res, next) => {
+    const role = req.user?.role || "user";
+    const granted = getRolePermissions(role);
+    if (granted.includes("*") || permissions.every((permission) => granted.includes(permission))) {
+      return next();
+    }
+    return res.status(403).json({ message: "Forbidden." });
   };
 }

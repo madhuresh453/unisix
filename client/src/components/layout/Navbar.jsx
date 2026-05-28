@@ -12,11 +12,13 @@ import { useEffect, useState } from "react";
 import { navLinks } from "@/utils/constants";
 import { cn } from "@/utils/helpers";
 import { Button } from "@/components/ui/Button";
+import { useAuth } from "@/hooks/useAuth";
 
 function Navbar() {
   const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
+  const { user, isAuthenticated, isAdmin, loading, signOut } = useAuth();
 
   // CLOSE MOBILE MENU ON ROUTE CHANGE
   useEffect(() => {
@@ -95,20 +97,39 @@ function Navbar() {
 
         {/* DESKTOP ACTIONS */}
         <div className="hidden shrink-0 items-center gap-3 xl:flex">
-          <Button
-            href="/auth/login"
-            variant="secondary"
-            className="min-h-[44px] whitespace-nowrap rounded-xl border border-white/[0.18] bg-white/[0.02] px-7 py-2.5 text-[12px] font-black uppercase tracking-[0.14em] transition-all duration-300 hover:border-cyber-red/60 hover:bg-[#12070a]"
-          >
-            Login
-          </Button>
+          {!loading && !isAuthenticated ? (
+            <>
+              <Button
+                href="/auth/login"
+                variant="secondary"
+                className="min-h-[44px] whitespace-nowrap rounded-xl border border-white/[0.18] bg-white/[0.02] px-7 py-2.5 text-[12px] font-black uppercase tracking-[0.14em] transition-all duration-300 hover:border-cyber-red/60 hover:bg-[#12070a]"
+              >
+                Login
+              </Button>
 
-          <Button
-            href="/auth/register"
-            className="min-h-[44px] whitespace-nowrap rounded-xl bg-cyber-red px-7 py-2.5 text-[12px] font-black uppercase tracking-[0.14em] text-white shadow-[0_0_30px_rgba(255,0,60,0.35)] transition-all duration-300 hover:bg-red-600 hover:shadow-[0_0_40px_rgba(255,0,60,0.5)]"
-          >
-            Sign Up
-          </Button>
+              <Button
+                href="/auth/register"
+                className="min-h-[44px] whitespace-nowrap rounded-xl bg-cyber-red px-7 py-2.5 text-[12px] font-black uppercase tracking-[0.14em] text-white shadow-[0_0_30px_rgba(255,0,60,0.35)] transition-all duration-300 hover:bg-red-600 hover:shadow-[0_0_40px_rgba(255,0,60,0.5)]"
+              >
+                Sign Up
+              </Button>
+            </>
+          ) : null}
+          {!loading && isAuthenticated ? (
+            <>
+              {isAdmin ? (
+                <Button href="/admin/dashboard" variant="secondary" className="min-h-[44px] whitespace-nowrap rounded-xl px-5 py-2.5 text-[12px] font-black uppercase tracking-[0.14em]">
+                  Admin Panel
+                </Button>
+              ) : null}
+              <Button href="/dashboard" variant="secondary" className="min-h-[44px] whitespace-nowrap rounded-xl px-5 py-2.5 text-[12px] font-black uppercase tracking-[0.14em]">
+                {user?.handle || user?.name || "Profile"}
+              </Button>
+              <Button onClick={signOut} className="min-h-[44px] whitespace-nowrap rounded-xl bg-cyber-red px-5 py-2.5 text-[12px] font-black uppercase tracking-[0.14em] text-white">
+                Logout
+              </Button>
+            </>
+          ) : null}
         </div>
 
         {/* MOBILE TOGGLE */}
@@ -165,20 +186,39 @@ function Navbar() {
 
           {/* MOBILE BUTTONS */}
           <div className="grid gap-2 pt-3 sm:grid-cols-2">
-            <Button
-              href="/auth/login"
-              variant="secondary"
-              className="w-full"
-            >
-              Login
-            </Button>
+            {!loading && !isAuthenticated ? (
+              <>
+                <Button
+                  href="/auth/login"
+                  variant="secondary"
+                  className="w-full"
+                >
+                  Login
+                </Button>
 
-            <Button
-              href="/auth/register"
-              className="w-full"
-            >
-              Sign Up
-            </Button>
+                <Button
+                  href="/auth/register"
+                  className="w-full"
+                >
+                  Sign Up
+                </Button>
+              </>
+            ) : null}
+            {!loading && isAuthenticated ? (
+              <>
+                <Button href="/dashboard" variant="secondary" className="w-full">
+                  {user?.handle || user?.name || "Profile"}
+                </Button>
+                <Button onClick={signOut} className="w-full">
+                  Logout
+                </Button>
+                {isAdmin ? (
+                  <Button href="/admin/dashboard" variant="secondary" className="w-full sm:col-span-2">
+                    Admin Panel
+                  </Button>
+                ) : null}
+              </>
+            ) : null}
           </div>
         </div>
       </div>

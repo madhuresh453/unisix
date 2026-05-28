@@ -1,15 +1,20 @@
+import { getRolePermissions, isAdminRole } from "../security/rbac.js";
+
 export function asyncHandler(fn) {
   return (req, res, next) => Promise.resolve(fn(req, res, next)).catch(next);
 }
 
 export function toPublicUser(user) {
   if (!user) return null;
+  const role = user.role || "user";
   return {
     id: user._id,
     name: user.name,
     handle: user.handle,
     email: user.email,
-    role: user.role,
+    role,
+    permissions: getRolePermissions(role),
+    adminAccess: isAdminRole(role),
     country: user.country,
     score: user.score,
     badges: user.badges,

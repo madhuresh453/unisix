@@ -1,7 +1,14 @@
 import { Router } from "express";
 import { body, param, query } from "express-validator";
-import { createChallenge, getChallenge, listChallenges, unlockHint } from "../controllers/challengeController.js";
-import { requireAuth, requireRole } from "../middlewares/authMiddleware.js";
+import {
+  createChallenge,
+  deleteChallenge,
+  getChallenge,
+  listChallenges,
+  unlockHint,
+  updateChallenge
+} from "../controllers/challengeController.js";
+import { requireAuth, requirePermission } from "../middlewares/authMiddleware.js";
 import { validate } from "../middlewares/errorMiddleware.js";
 
 const router = Router();
@@ -19,11 +26,15 @@ router.get(
   "/",
   query("category").optional().trim(),
   query("ctf").optional().isMongoId(),
+  query("status").optional().trim(),
+  query("search").optional().trim(),
   validate,
   listChallenges
 );
 router.get("/:challengeId", param("challengeId").trim().isLength({ min: 2 }), validate, getChallenge);
-router.post("/", requireAuth, requireRole("admin"), challengePayloadRules, validate, createChallenge);
+router.post("/", requireAuth, requirePermission("challenges:manage"), challengePayloadRules, validate, createChallenge);
+router.put("/:challengeId", requireAuth, requirePermission("challenges:manage"), param("challengeId").trim().isLength({ min: 2 }), validate, updateChallenge);
+router.delete("/:challengeId", requireAuth, requirePermission("challenges:manage"), param("challengeId").trim().isLength({ min: 2 }), validate, deleteChallenge);
 router.post(
   "/:challengeId/hints/:hintId/unlock",
   requireAuth,

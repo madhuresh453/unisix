@@ -7,7 +7,11 @@ const userSchema = new mongoose.Schema(
     handle: { type: String, required: true, unique: true, trim: true, maxlength: 32 },
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     password: { type: String, required: true, minlength: 8, select: false },
-    role: { type: String, enum: ["user", "captain", "admin"], default: "user" },
+    role: {
+      type: String,
+      enum: ["user", "captain", "moderator", "content_manager", "admin", "super_admin"],
+      default: "user"
+    },
     country: { type: String, default: "IN" },
     bio: { type: String, default: "", maxlength: 320 },
     score: { type: Number, default: 0 },

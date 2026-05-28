@@ -10,7 +10,10 @@ function byIdOrSlug(value) {
 
 export const listCTFs = asyncHandler(async (req, res) => {
   const { limit, skip, page } = pagination(req.query);
-  const filter = req.query.status ? { status: req.query.status } : {};
+  const filter = {
+    ...(req.query.status ? { status: req.query.status } : {}),
+    ...(req.query.search ? { name: { $regex: req.query.search, $options: "i" } } : {})
+  };
   const [ctfs, total] = await Promise.all([
     CTF.find(filter).sort({ startsAt: 1 }).skip(skip).limit(limit).lean(),
     CTF.countDocuments(filter)
@@ -38,6 +41,18 @@ export const createCTF = asyncHandler(async (req, res) => {
   });
 
   res.status(201).json({ ctf });
+});
+
+export const updateCTF = asyncHandler(async (req, res) => {
+  const ctf = await CTF.findOneAndUpdate(byIdOrSlug(req.params.ctfId), { $set: req.body }, { new: true });
+  if (!ctf) return res.status(404).json({ message: "CTF not found." });
+  return res.json({ ctf });
+});
+
+export const deleteCTF = asyncHandler(async (req, res) => {
+  const ctf = await CTF.findOneAndDelete(byIdOrSlug(req.params.ctfId));
+  if (!ctf) return res.status(404).json({ message: "CTF not found." });
+  return res.status(204).send();
 });
 
 export const registerForCTF = asyncHandler(async (req, res) => {

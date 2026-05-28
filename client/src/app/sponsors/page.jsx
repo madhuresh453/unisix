@@ -6,6 +6,7 @@ import { PartnersSection } from "@/components/sponsors/PartnersSection";
 import { BecomeSponsorCTA } from "@/components/sponsors/BecomeSponsorCTA";
 import { PartnerBenefits } from "@/components/sponsors/PartnerBenefits";
 import { SponsorTestimonials } from "@/components/sponsors/SponsorTestimonials";
+import { fetchCms } from "@/lib/cmsApi";
 
 
 const sponsorTiers = [
@@ -56,7 +57,51 @@ const sponsorTiers = [
   }
 ];
 
-export default function SponsorsPage() {
+export default async function SponsorsPage() {
+  const sponsorsRes = await fetchCms("/sponsors");
+  const sponsors = Array.isArray(sponsorsRes?.sponsors) ? sponsorsRes.sponsors : [];
+  const tierMap = sponsors.reduce(
+    (acc, sponsor) => {
+      const tierKey = String(sponsor.tier || "community").toLowerCase();
+      if (tierKey === "platinum") acc.platinum.push(sponsor);
+      else if (tierKey === "gold") acc.gold.push(sponsor);
+      else acc.silver.push(sponsor);
+      return acc;
+    },
+    { platinum: [], gold: [], silver: [] }
+  );
+
+  const dynamicSponsorTiers = [
+    {
+      ...sponsorTiers[0],
+      logos: tierMap.platinum.map((item) => ({
+        name: item.name,
+        initials: item.name?.slice(0, 2)?.toUpperCase() || "SP",
+        subtitle: item.website || "Sponsor",
+        bg: "bg-white/5 text-[#facc15]"
+      }))
+    },
+    {
+      ...sponsorTiers[1],
+      logos: tierMap.gold.map((item) => ({
+        name: item.name,
+        initials: item.name?.slice(0, 2)?.toUpperCase() || "SP",
+        subtitle: item.website || "Sponsor",
+        bg: "bg-white/5 text-white"
+      }))
+    },
+    {
+      ...sponsorTiers[2],
+      logos: tierMap.silver.map((item) => ({
+        name: item.name,
+        initials: item.name?.slice(0, 2)?.toUpperCase() || "SP",
+        subtitle: item.website || "Sponsor",
+        bg: "bg-white/5 text-white"
+      }))
+    }
+  ];
+
+  const tiersToRender = dynamicSponsorTiers.some((tier) => tier.logos.length) ? dynamicSponsorTiers : sponsorTiers;
   return (
     <PageShell className="grid gap-16 pb-20">
       <SponsorsHero />
@@ -75,7 +120,7 @@ export default function SponsorsPage() {
         </div>
 
         <div className="grid gap-6 xl:grid-cols-3">
-          {sponsorTiers.map((tier) => (
+          {tiersToRender.map((tier) => (
             <SponsorTierCard key={tier.title} {...tier} />
           ))}
         </div>

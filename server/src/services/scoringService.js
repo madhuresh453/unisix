@@ -4,6 +4,8 @@ import { Challenge } from "../models/Challenge.js";
 import { Submission } from "../models/Submission.js";
 import { User } from "../models/User.js";
 import { Team } from "../models/Team.js";
+import { Solve } from "../models/Solve.js";
+import { AttemptLog } from "../models/AttemptLog.js";
 import { emitScoreboard } from "../config/socket.js";
 import { buildEventLeaderboardRows } from "./leaderboardService.js";
 
@@ -69,6 +71,15 @@ export async function validateAndScoreSubmission({ user, challengeId, flag, ip, 
       latencyMs,
       antiCheat
     });
+    await AttemptLog.create({
+      user: user._id,
+      challenge: challenge._id,
+      ctf: challenge.ctf,
+      status: "duplicate",
+      ip,
+      userAgent,
+      riskScore: antiCheat.riskScore || 0
+    });
 
     return { accepted: true, duplicate: true, submission, points: 0, message: "Already solved." };
   }
@@ -89,10 +100,22 @@ export async function validateAndScoreSubmission({ user, challengeId, flag, ip, 
     latencyMs,
     antiCheat
   });
+  await AttemptLog.create({
+    user: user._id,
+    challenge: challenge._id,
+    ctf: challenge.ctf,
+    status: accepted ? "accepted" : antiCheat.riskScore >= 80 ? "review" : "rejected",
+    ip,
+    userAgent,
+    riskScore: antiCheat.riskScore || 0
+  });
 
   if (!accepted) {
     return { accepted: false, duplicate: false, submission, points: 0, message: "Incorrect flag." };
   }
+
+  const existingFirst = await Solve.findOne({ challenge: challenge._id });
+  const firstBlood = !existingFirst;
 
   await Challenge.updateOne(
     { _id: challenge._id },
@@ -111,6 +134,16 @@ export async function validateAndScoreSubmission({ user, challengeId, flag, ip, 
     }
   );
 
+  await Solve.create({
+    user: user._id,
+    team: user.team,
+    ctf: challenge.ctf,
+    challenge: challenge._id,
+    submission: submission._id,
+    pointsAwarded,
+    firstBlood
+  });
+
   if (user.team) {
     await Team.updateOne(
       { _id: user.team },
@@ -123,7 +156,14 @@ export async function validateAndScoreSubmission({ user, challengeId, flag, ip, 
     emitScoreboard(challenge.ctf.toString(), rows);
   }
 
-  return { accepted: true, duplicate: false, submission, points: pointsAwarded, message: "Accepted." };
+  return {
+    accepted: true,
+    duplicate: false,
+    submission,
+    points: pointsAwarded,
+    firstBlood,
+    message: firstBlood ? "Accepted. First blood!" : "Accepted."
+  };
 }
 
 function maskFlag(flag) {

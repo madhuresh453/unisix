@@ -114,10 +114,19 @@ function TrophyArt() {
   );
 }
 
-export function ReferenceHome() {
+export function ReferenceHome({ cms = null, ctfs = [] }) {
+  const cmsStats = Array.isArray(cms?.stats) ? cms.stats : null;
+  const cmsAchievements = Array.isArray(cms?.achievements) ? cms.achievements : null;
+  const cmsPartners = Array.isArray(cms?.partners) ? cms.partners : null;
+  const hero = cms?.hero || {};
+  const about = cms?.about || {};
   const liveEvent = useMemo(
-    () => events.find((item) => item.status === "live") || events[0],
-    [],
+    () =>
+      ctfs.find((item) => item.status === "live") ||
+      events.find((item) => String(item.status).toLowerCase() === "live") ||
+      ctfs[0] ||
+      events[0],
+    [ctfs],
   );
 
   return (
@@ -144,39 +153,36 @@ export function ReferenceHome() {
             <div className="relative w-full px-4 pb-8 pt-0 sm:px-6 md:px-8">
               <div className="w-full pt-[58px] sm:pt-[74px]">
                 <p className="text-[13px] font-black uppercase tracking-[0.18em] text-cyber-red text-red-glow sm:text-[15px]">
-                  Capture the Flag
+                  {hero.eyebrow || "Capture the Flag"}
                 </p>
                 <h1 className="mt-5 text-[clamp(3.45rem,13vw,5.1rem)] font-black uppercase leading-[0.88] tracking-[0.01em] text-white sm:text-[76px] lg:text-[82px] xl:text-[92px]">
                   <span className="block font-cyber-title text-white drop-shadow-[0_0_11px_rgba(255,255,255,0.22)]">
-                    Hack. Learn.
+                    {hero.titleLine1 || "Hack. Learn."}
                   </span>
                   <span className="block font-cyber-title text-cyber-red drop-shadow-[0_0_22px_rgba(255,0,0,0.48)]">
-                    Compete. Grow.
+                    {hero.titleLine2 || "Compete. Grow."}
                   </span>
                 </h1>
                 <p className="mt-6 w-full text-[16px] leading-[1.55] text-[#ffffff]/90 sm:text-[18px]">
-                  UNI6CTF is a cybersecurity platform that <br />
-                  organizes and hosts CTF competitions
-                  <br /> to challenge, educate and empower
-                  <br /> the next generation of hackers.
+                  {hero.description || "UNI6CTF is a cybersecurity platform that organizes and hosts CTF competitions to challenge, educate and empower the next generation of hackers."}
                 </p>
                 <div className="mt-8 flex flex-col gap-4 min-[430px]:flex-row">
                   <Button
-                    href="/ctf/live"
+                    href={hero.primaryCtaHref || "/ctf/live"}
                     icon={ArrowRight}
                     iconPosition="right"
                     className="min-h-[48px] rounded-md px-6 w-full sm:w-auto"
                   >
-                    Join Live CTF
+                    {hero.primaryCtaText || "Join Live CTF"}
                   </Button>
                   <Button
-                    href="/ctf"
+                    href={hero.secondaryCtaHref || "/ctf"}
                     variant="secondary"
                     icon={ArrowRight}
                     iconPosition="right"
                     className="min-h-[48px] rounded-md border-white/[0.28] bg-white/[0.02] px-6 w-full sm:w-auto"
                   >
-                    Explore Events
+                    {hero.secondaryCtaText || "Explore Events"}
                   </Button>
                 </div>
               </div>
@@ -195,7 +201,7 @@ export function ReferenceHome() {
 
       <div className="relative z-10 mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid overflow-hidden rounded-md border border-white/20 bg-[#070b0d]/92 shadow-[0_18px_70px_rgba(0,0,0,0.55)] backdrop-blur md:grid-cols-2 lg:grid-cols-4">
-          {stats.map((stat, index) => (
+          {(cmsStats || stats).map((stat, index) => (
             <StatItem
               key={stat.label}
               stat={stat}
@@ -274,34 +280,30 @@ export function ReferenceHome() {
           </div>
         </div>
         <div>
-          <p className="text-[13px] font-black uppercase tracking-[0.16em] text-cyber-red text-red-glow">
-            || About UNI6CTF
-          </p>
+          <p className="text-[13px] font-black uppercase tracking-[0.16em] text-cyber-red text-red-glow">{about.label || "|| About UNI6CTF"}</p>
           <h2 className="mt-5 font-cyber-title text-[34px] font-black uppercase leading-[1.05] tracking-[0.06em] text-white">
-            Building The Future
-            <span className="block text-cyber-red">Of Cybersecurity</span>
+            {about.title || "Building The Future"}
+            <span className="block text-cyber-red">{about.titleAccent || "Of Cybersecurity"}</span>
           </h2>
         </div>
         <p className="text-[14px] leading-[1.65] text-white/78">
-          We are a passionate group of cybersecurity enthusiasts on a mission to
-          build a strong, competitive and inclusive hacking community through
-          CTFs, knowledge sharing and innovation.
+          {about.description || "We are a passionate group of cybersecurity enthusiasts on a mission to build a strong, competitive and inclusive hacking community through CTFs, knowledge sharing and innovation."}
         </p>
         <Button
-          href="/about"
+          href={about.ctaHref || "/about"}
           variant="secondary"
           icon={ArrowRight}
           iconPosition="right"
           className="rounded-md border-white/[0.28] bg-white/[0.02] md:justify-self-start lg:justify-self-auto"
         >
-          Read Our Story
+          {about.ctaText || "Read Our Story"}
         </Button>
       </section>
 
       <section className="relative mx-auto w-full max-w-7xl px-4 py-5 sm:px-6 lg:px-8">
         <SectionLabel>Our Achievements</SectionLabel>
         <div className="mt-6 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
-          {achievements.map((achievement) => {
+          {(cmsAchievements || achievements).map((achievement) => {
             const Icon = achievement.icon;
             return (
               <div
@@ -366,7 +368,7 @@ export function ReferenceHome() {
       <section className="relative mx-auto w-full max-w-7xl px-4 pb-11 pt-4 sm:px-6 lg:px-8">
         <SectionLabel>Our Partners</SectionLabel>
         <div className="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
-          {partners.map((partner) => {
+          {(cmsPartners || partners).map((partner) => {
             const Icon = partner.icon;
             return (
               <div

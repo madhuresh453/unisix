@@ -5,10 +5,13 @@ import {
   Trophy,
   Users
 } from "lucide-react";
-import { events } from "@/utils/constants";
+import { fetchCms } from "@/lib/cmsApi";
+import { mapCtfToCard } from "@/lib/ctfMapper";
 import { formatDate } from "@/utils/formatters";
 
-export default function PastCTFPage() {
+export default async function PastCTFPage() {
+  const ctfRes = await fetchCms("/ctfs?status=past&limit=200");
+  const events = (ctfRes?.ctfs || []).map(mapCtfToCard);
   const pastEvents = events.filter((event) => event.status === "past");
 
   return (

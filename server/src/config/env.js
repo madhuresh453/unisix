@@ -24,7 +24,18 @@ export const env = {
   authDebug: process.env.AUTH_DEBUG === "true",
   flagPepper: process.env.FLAG_PEPPER || "dev-only-change-this-flag-pepper",
   rateLimitWindowMs: Number(process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000),
-  rateLimitMax: Number(process.env.RATE_LIMIT_MAX || 120)
+  rateLimitMax: Number(process.env.RATE_LIMIT_MAX || 120),
+  csrfCookieName: process.env.CSRF_COOKIE_NAME || "uni6ctf_csrf",
+  csrfHeaderName: process.env.CSRF_HEADER_NAME || "x-csrf-token",
+  redisUrl: process.env.REDIS_URL || "",
+  cloudinaryCloudName: process.env.CLOUDINARY_CLOUD_NAME || "",
+  cloudinaryApiKey: process.env.CLOUDINARY_API_KEY || "",
+  cloudinaryApiSecret: process.env.CLOUDINARY_API_SECRET || "",
+  cloudinaryUploadPreset: process.env.CLOUDINARY_UPLOAD_PRESET || "",
+  cloudinaryFolder: process.env.CLOUDINARY_FOLDER || "uni6ctf",
+  submissionCooldownMs: Number(process.env.SUBMISSION_COOLDOWN_MS || 3000),
+  authFailureWindowMs: Number(process.env.AUTH_FAILURE_WINDOW_MS || 15 * 60 * 1000),
+  authFailureLimit: Number(process.env.AUTH_FAILURE_LIMIT || 15)
 };
 
 export function assertProductionSecrets() {
@@ -33,5 +44,9 @@ export function assertProductionSecrets() {
   const unsafe = ["dev-only-change-this-long-secret", "dev-only-change-this-flag-pepper"];
   if (unsafe.includes(env.jwtSecret) || unsafe.includes(env.flagPepper)) {
     throw new Error("Production secrets must be configured before boot.");
+  }
+
+  if (!env.redisUrl) {
+    console.warn("[BOOT] REDIS_URL not set. Falling back to in-memory cache/queue.");
   }
 }

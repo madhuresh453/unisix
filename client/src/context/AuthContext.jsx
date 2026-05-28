@@ -7,9 +7,12 @@ export const AuthContext = createContext({
   user: null,
   token: null,
   loading: true,
+  isAuthenticated: false,
+  isAdmin: false,
   signIn: async () => {},
   signUp: async () => {},
-  signOut: () => {}
+  signOut: () => {},
+  refreshUser: async () => {}
 });
 
 export function AuthProvider({ children }) {
@@ -18,20 +21,55 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = window.localStorage.getItem("uni6ctf_token");
-    const storedUser = window.localStorage.getItem("uni6ctf_user");
+    let active = true;
 
-    if (storedToken) setToken(storedToken);
-    if (storedUser) setUser(JSON.parse(storedUser));
-    setLoading(false);
+    async function bootstrap() {
+      const storedToken = window.localStorage.getItem("uni6ctf_token");
+      const storedUser = window.localStorage.getItem("uni6ctf_user");
+
+      if (storedToken) setToken(storedToken);
+      if (storedUser) {
+        try {
+          setUser(JSON.parse(storedUser));
+        } catch {
+          window.localStorage.removeItem("uni6ctf_user");
+        }
+      }
+
+      if (!storedToken) {
+        if (active) setLoading(false);
+        return;
+      }
+
+      try {
+        const meResult = await authService.me();
+        if (!active) return;
+        setUser(meResult.user);
+        window.localStorage.setItem("uni6ctf_user", JSON.stringify(meResult.user));
+      } catch {
+        if (!active) return;
+        window.localStorage.removeItem("uni6ctf_token");
+        window.localStorage.removeItem("uni6ctf_user");
+        setToken(null);
+        setUser(null);
+      } finally {
+        if (active) setLoading(false);
+      }
+    }
+
+    bootstrap();
+    return () => {
+      active = false;
+    };
   }, []);
 
   async function persistSession(result) {
     window.localStorage.setItem("uni6ctf_token", result.token);
-    window.localStorage.setItem("uni6ctf_user", JSON.stringify(result.user));
     setToken(result.token);
-    setUser(result.user);
-    return result;
+    const meResult = await authService.me().catch(() => ({ user: result.user }));
+    window.localStorage.setItem("uni6ctf_user", JSON.stringify(meResult.user));
+    setUser(meResult.user);
+    return { ...result, user: meResult.user };
   }
 
   async function signIn(payload) {
@@ -44,16 +82,30 @@ export function AuthProvider({ children }) {
     return persistSession(result);
   }
 
-  function signOut() {
+  function signOut({ redirectTo = "/" } = {}) {
     window.localStorage.removeItem("uni6ctf_token");
     window.localStorage.removeItem("uni6ctf_user");
     setToken(null);
     setUser(null);
+    if (typeof window !== "undefined" && redirectTo) {
+      window.location.assign(redirectTo);
+    }
   }
 
+  async function refreshUser() {
+    if (!token) return null;
+    const meResult = await authService.me();
+    window.localStorage.setItem("uni6ctf_user", JSON.stringify(meResult.user));
+    setUser(meResult.user);
+    return meResult.user;
+  }
+
+  const isAuthenticated = Boolean(token && user);
+  const isAdmin = Boolean(user?.adminAccess);
+
   const value = useMemo(
-    () => ({ user, token, loading, signIn, signUp, signOut }),
-    [user, token, loading]
+    () => ({ user, token, loading, isAuthenticated, isAdmin, signIn, signUp, signOut, refreshUser }),
+    [user, token, loading, isAuthenticated, isAdmin]
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -35,6 +35,15 @@ const challengeSchema = new mongoose.Schema(
         checksum: String
       }
     ],
+    dockerUrl: String,
+    instanceUrl: String,
+    flagType: { type: String, enum: ["static", "regex"], default: "static" },
+    flagRegex: String,
+    visibility: { type: String, enum: ["public", "private"], default: "public" },
+    status: { type: String, enum: ["draft", "published", "archived"], default: "draft" },
+    scheduledReleaseAt: Date,
+    order: { type: Number, default: 0 },
+    featured: { type: Boolean, default: false },
     solves: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     solverCount: { type: Number, default: 0 },
     isPublished: { type: Boolean, default: false },

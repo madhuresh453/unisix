@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { fetchCms } from "@/lib/cmsApi";
 import {
   BadgeCheck,
   Eye,
@@ -22,7 +23,7 @@ import {
   Heart,
 } from "lucide-react";
 
-const missionCards = [
+const defaultMissionCards = [
   {
     icon: BadgeCheck,
     title: "OUR MISSION",
@@ -46,7 +47,7 @@ const missionCards = [
   },
 ];
 
-const timelineItems = [
+const defaultTimelineItems = [
   {
     icon: Lightbulb,
     year: "2026 March",
@@ -73,7 +74,7 @@ const timelineItems = [
   },
 ];
 
-const stats = [
+const defaultStats = [
   { icon: Shield, value: "3+", label: "CTF EVENTS HOSTED" },
   { icon: Users, value: "1100", label: "PARTICIPANTS WORLDWIDE" },
   { icon: Globe, value: "15+", label: "COUNTRIES INVOLVED" },
@@ -100,7 +101,13 @@ const resources = [
 ];
 const community = ["Discord Server", "Telegram Group", "GitHub", "YouTube"];
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const aboutRes = await fetchCms("/content/about");
+  const aboutSettings = aboutRes?.settings || {};
+  const missionCards = aboutSettings.missionCards?.length ? aboutSettings.missionCards : defaultMissionCards;
+  const timelineItems = aboutSettings.timelineItems?.length ? aboutSettings.timelineItems : defaultTimelineItems;
+  const stats = aboutSettings.stats?.length ? aboutSettings.stats : defaultStats;
+  const founder = aboutSettings.founder || {};
   return (
     <main className="relative overflow-hidden bg-[#040404] text-white">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,0,50,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,0,50,0.03)_1px,transparent_1px)] bg-[size:70px_70px] opacity-20" />
@@ -300,8 +307,8 @@ export default function AboutPage() {
 
       <section className="relative z-10 mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         <div className="grid gap-4 md:grid-cols-3">
-          {missionCards.map((card) => {
-            const Icon = card.icon;
+          {missionCards.map((card, index) => {
+            const Icon = card.icon || defaultMissionCards[index % defaultMissionCards.length].icon;
             return (
               <article
                 key={card.title}
@@ -346,7 +353,7 @@ export default function AboutPage() {
             </h3>
             <div className="mt-6 space-y-6">
               {timelineItems.map((item, index) => {
-                const Icon = item.icon;
+                const Icon = item.icon || defaultTimelineItems[index % defaultTimelineItems.length].icon;
                 return (
                   <div
                     key={item.title}
@@ -396,22 +403,19 @@ export default function AboutPage() {
               </h3>
               <Quote className="mt-4 h-12 w-12 text-[#ff2a4f]" />
               <p className="mt-4 text-lg leading-8 text-white/82">
-                UNI6CTF is not just a platform, it is a movement. Our goal is to
-                break barriers, create opportunities and inspire every
-                individual to explore the world of cybersecurity with curiosity
-                and confidence. Together, we hack. We learn. We secure.
+                {founder.quote || "UNI6CTF is not just a platform, it is a movement. Our goal is to break barriers, create opportunities and inspire every individual to explore the world of cybersecurity with curiosity and confidence. Together, we hack. We learn. We secure."}
               </p>
               <div
                 className="mt-7 text-4xl text-white/90"
                 style={{ fontFamily: "cursive" }}
               >
-                Madhuresh kumar jha
+                {founder.name || "Madhuresh kumar jha"}
                 
               </div>
               <p className="mt-2 text-2xl font-semibold text-[#ff3559]">
-                CEO & Founder
+                {founder.title || "CEO & Founder"}
               </p>
-              <p className="text-lg text-white/75">UNI6CTF</p>
+              <p className="text-lg text-white/75">{founder.org || "UNI6CTF"}</p>
             </div>
           </article>
         </div>
@@ -419,8 +423,8 @@ export default function AboutPage() {
 
       <section className="relative z-10 mx-auto max-w-[1500px] px-6 pb-8">
         <div className="grid gap-2 rounded-xl border border-white/15 bg-[linear-gradient(145deg,rgba(10,14,20,0.82),rgba(7,8,12,0.9))] p-2 backdrop-blur-md md:grid-cols-5">
-          {stats.map((stat) => {
-            const Icon = stat.icon;
+          {stats.map((stat, index) => {
+            const Icon = stat.icon || defaultStats[index % defaultStats.length].icon;
             return (
               <article
                 key={stat.label}

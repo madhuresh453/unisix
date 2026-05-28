@@ -25,6 +25,7 @@ export const submitFlag = asyncHandler(async (req, res) => {
   res.status(result.accepted ? 200 : 202).json({
     accepted: result.accepted,
     duplicate: result.duplicate,
+    firstBlood: result.firstBlood || false,
     points: result.points,
     message: result.message,
     antiCheat: antiCheat.riskScore >= 80 ? antiCheat : undefined

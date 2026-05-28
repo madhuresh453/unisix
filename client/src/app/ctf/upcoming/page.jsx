@@ -7,10 +7,13 @@ import {
   Trophy,
   Users
 } from "lucide-react";
-import { events } from "@/utils/constants";
+import { fetchCms } from "@/lib/cmsApi";
+import { mapCtfToCard } from "@/lib/ctfMapper";
 import { CountdownTimer } from "@/components/CountdownTimer";
 
-export default function UpcomingCTFPage() {
+export default async function UpcomingCTFPage() {
+  const ctfRes = await fetchCms("/ctfs?status=upcoming&limit=200");
+  const events = (ctfRes?.ctfs || []).map(mapCtfToCard);
   const upcomingEvents = events.filter((event) => event.status === "upcoming");
 
   return (
