@@ -21,6 +21,7 @@ export const env = {
   mongoUri: process.env.MONGODB_URI || "mongodb://localhost:27017/uni6ctf",
   jwtSecret: process.env.JWT_SECRET || "dev-only-change-this-long-secret",
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
+  authDebug: process.env.AUTH_DEBUG === "true",
   flagPepper: process.env.FLAG_PEPPER || "dev-only-change-this-flag-pepper",
   rateLimitWindowMs: Number(process.env.RATE_LIMIT_WINDOW_MS || 15 * 60 * 1000),
   rateLimitMax: Number(process.env.RATE_LIMIT_MAX || 120)

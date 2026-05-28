@@ -6,6 +6,12 @@ export function validate(req, res, next) {
 
   if (result.isEmpty()) return next();
 
+  if (env.authDebug && req.path.includes("/auth/login")) {
+    console.log("[AUTH_DEBUG] login validation errors", {
+      errors: result.array().map((error) => ({ field: error.path, message: error.msg }))
+    });
+  }
+
   return res.status(422).json({
     message: "Validation failed.",
     errors: result.array().map((error) => ({
