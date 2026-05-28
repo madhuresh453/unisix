@@ -13,6 +13,7 @@ import { diagnosticsStatus, healthStatus } from "../controllers/opsController.js
 import tenantPublicRoutes from "./tenantPublicRoutes.js";
 import tenantAdminRoutes from "./tenantAdminRoutes.js";
 import learningRoutes from "./learningRoutes.js";
+import labRoutes from "./labRoutes.js";
 import engagementRoutes from "./engagementRoutes.js";
 
 const router = Router();
@@ -31,6 +32,7 @@ router.use("/writeups", writeupRoutes);
 router.use("/sponsors", sponsorRoutes);
 router.use("/content", contentRoutes);
 router.use("/learning", learningRoutes);
+router.use("/labs", labRoutes);
 router.use("/engagement", engagementRoutes);
 router.use("/admin", adminRoutes);
 router.use("/ctf/:slug", tenantPublicRoutes);

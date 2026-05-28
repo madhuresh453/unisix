@@ -22,6 +22,7 @@ import {
   issueCertificate,
   listLearningContent,
   paymentWebhook,
+  submitLearningFlag,
   subscribePlan,
   updateEnrollmentProgress,
   verifyCertificate
@@ -53,6 +54,7 @@ router.get(
 );
 
 router.post("/:type(labs|rooms|courses|workshops)/:id/enroll", requireAuth, param("id").isMongoId(), validate, enrollLearningContent);
+router.post("/:type(labs|rooms|courses|workshops)/:id/flags", requireAuth, param("id").isMongoId(), body("flag").trim().isLength({ min: 5 }), validate, submitLearningFlag);
 
 router.get("/me/dashboard", requireAuth, getMyLearningDashboard);
 router.patch("/me/enrollments/:enrollmentId", requireAuth, param("enrollmentId").isMongoId(), body("progress").optional().isFloat({ min: 0, max: 100 }), validate, updateEnrollmentProgress);

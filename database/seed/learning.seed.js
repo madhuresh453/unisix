@@ -32,6 +32,13 @@ function lab(entry, index) {
     slug,
     shortDescription,
     fullDescription: `${shortDescription} This professional lab includes guided exploitation steps, defensive notes, evidence collection, and remediation guidance suitable for portfolio-grade reporting.`,
+    storyline: `Simulate a real-world ${category.toLowerCase()} attack chain and practise adversary tradecraft in a safe, enterprise lab environment.`,
+    attackSummary: `Pivot, enumerate, exploit and escalate through a high-risk ${category.toLowerCase()} target. Collect indicators and prepare a professional remediation report.`,
+    learningOutcomes: [
+      `Exploit ${tags[0]} weak points in an enterprise-grade target`,
+      "Chain vulnerability analysis to impact and remediation",
+      "Produce a security report with evidence and fix recommendations"
+    ],
     description: shortDescription,
     category,
     difficulty,
@@ -42,6 +49,23 @@ function lab(entry, index) {
       "Collect evidence and write practical remediation guidance."
     ],
     prerequisites: ["Linux command line", "HTTP and networking basics", "Burp Suite or equivalent tooling"],
+    hints: [
+      { title: "Initial reconnaissance", content: "Map exposed inputs and focus on authentication workflows.", cost: 30, premium: false },
+      { title: "Payload maturity", content: "Test blind injection with timing and error-based payloads.", cost: 60, premium: true }
+    ],
+    flags: [
+      { label: `UNI6{${slug.replaceAll("-", "_")}_access}`, points: 150, description: "Initial access proof-of-concept." },
+      { label: `UNI6{${slug.replaceAll("-", "_")}_exploit}`, points: 250, description: "Final exploit confirmation flag." }
+    ],
+    achievements: [
+      { title: "First Blood", description: "Submit your first lab flag.", points: 100, badge: "first-blood", criteria: "First correct flag" },
+      { title: "Speed Runner", description: "Complete the lab under target time.", points: 200, badge: "speed-runner", criteria: "Complete in one session" }
+    ],
+    environment: {
+      deploySteps: ["Provision lab instance", "Run init script", "Monitor container health"],
+      accessMethods: ["AttackBox", "VPN", "SSH Shell"],
+      resetInstructions: "Reset the lab environment anytime to restore initial conditions."
+    },
     estimatedTime,
     xpReward,
     premium,

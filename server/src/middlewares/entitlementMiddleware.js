@@ -3,7 +3,23 @@ import { Subscription } from "../models/Subscription.js";
 import { Enrollment } from "../models/Enrollment.js";
 import { isAdminRole } from "../security/rbac.js";
 
-async function hasPaidAccess(userId, itemType, itemId) {
+export function requireEnrollment(contentTypeResolver = (req) => req.params.contentType, contentIdResolver = (req) => req.params.id) {
+  return async (req, res, next) => {
+    if (!req.user) return res.status(401).json({ message: "Authentication required." });
+    if (isAdminRole(req.user.role)) return next();
+
+    const contentType = contentTypeResolver(req);
+    const contentId = contentIdResolver(req);
+    const enrollment = await Enrollment.findOne({ userId: req.user._id, contentType, contentId }).lean();
+
+    if (!enrollment) return res.status(403).json({ message: "Enrollment required." });
+
+    req.enrollment = enrollment;
+    return next();
+  };
+}
+
+export async function hasPaidAccess(userId, itemType, itemId) {
   const now = new Date();
   const purchase = await Purchase.findOne({
     userId,
@@ -22,22 +38,6 @@ async function hasPaidAccess(userId, itemType, itemId) {
   }).lean();
 
   return Boolean(sub);
-}
-
-export function requireEnrollment(contentTypeResolver = (req) => req.params.contentType, contentIdResolver = (req) => req.params.id) {
-  return async (req, res, next) => {
-    if (!req.user) return res.status(401).json({ message: "Authentication required." });
-    if (isAdminRole(req.user.role)) return next();
-
-    const contentType = contentTypeResolver(req);
-    const contentId = contentIdResolver(req);
-    const enrollment = await Enrollment.findOne({ userId: req.user._id, contentType, contentId }).lean();
-
-    if (!enrollment) return res.status(403).json({ message: "Enrollment required." });
-
-    req.enrollment = enrollment;
-    return next();
-  };
 }
 
 export function requirePurchase(contentTypeResolver = (req) => req.params.contentType, contentIdResolver = (req) => req.params.id) {

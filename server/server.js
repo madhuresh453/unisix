@@ -23,6 +23,7 @@ import { startLeaderboardJob } from "./src/jobs/leaderboardJob.js";
 import { registerNotificationSocket } from "./src/sockets/notifications.js";
 import { registerScoreboardSocket } from "./src/sockets/scoreboard.js";
 import { registerLearningSocket } from "./src/sockets/learning.js";
+import { registerLabSocket } from "./src/sockets/lab.js";
 
 console.log("Checking production secrets...");
 assertProductionSecrets();
@@ -39,6 +40,7 @@ io.on("connection", (socket) => {
   registerScoreboardSocket(io, socket);
   registerNotificationSocket(io, socket);
   registerLearningSocket(io, socket);
+  registerLabSocket(io, socket);
 });
 
 async function bootstrap() {

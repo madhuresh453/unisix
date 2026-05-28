@@ -11,6 +11,7 @@ import { Subscription } from "../models/Subscription.js";
 import { Media } from "../models/Media.js";
 import { asyncHandler, pagination } from "../utils/helpers.js";
 import { getIO } from "../config/socket.js";
+import { hasPaidAccess } from "../middlewares/entitlementMiddleware.js";
 
 const MODELS = {
   labs: Lab,
@@ -133,6 +134,10 @@ export const enrollLearningContent = asyncHandler(async (req, res) => {
   const item = await model.findById(req.params.id).lean();
   if (!item) return res.status(404).json({ message: "Content not found." });
 
+  if (item.premium && !(await hasPaidAccess(req.user._id, req.params.type.slice(0, -1), item._id))) {
+    return res.status(403).json({ message: "Premium access required before enrolling." });
+  }
+
   const enrollment = await Enrollment.findOneAndUpdate(
     { userId: req.user._id, contentType: req.params.type.slice(0, -1), contentId: item._id },
     { $setOnInsert: { enrolledAt: new Date(), progress: 0, completed: false } },
@@ -146,6 +151,40 @@ export const enrollLearningContent = asyncHandler(async (req, res) => {
   emitLearningEvent(req, "learning:enrollment", { type: req.params.type, id: String(item._id) });
 
   res.status(201).json({ enrollment });
+});
+
+export const submitLearningFlag = asyncHandler(async (req, res) => {
+  const model = pickModel(req.params.type);
+  const item = await model.findById(req.params.id).lean();
+  if (!item) return res.status(404).json({ message: "Content not found." });
+  if (!item.flags?.length) return res.status(422).json({ message: "No flagging exercise is available for this content." });
+
+  const attempt = String(req.body.flag || "").trim();
+  const matched = item.flags.find((flag) => String(flag.label || "").trim().toLowerCase() === attempt.toLowerCase());
+  if (!matched) return res.status(400).json({ message: "Incorrect flag. Try again." });
+
+  const enrollment = await Enrollment.findOneAndUpdate(
+    { userId: req.user._id, contentType: req.params.type.slice(0, -1), contentId: item._id },
+    { $setOnInsert: { enrolledAt: new Date(), progress: 0, completed: false } },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
+  );
+
+  const reward = Number(matched.points || 100);
+  await Purchase.create({
+    userId: req.user._id,
+    itemType: req.params.type.slice(0, -1),
+    itemId: item._id,
+    amount: 0,
+    paymentStatus: "paid",
+    transactionId: `flag_${Date.now()}_${crypto.randomBytes(4).toString("hex")}`,
+    provider: "manual",
+    metadata: { source: "flag_submission", rewardPoints: reward }
+  });
+
+  await model.updateOne({ _id: item._id }, { $inc: { "analytics.completions": 1 } }).catch(() => null);
+  emitLearningEvent(req, "learning:flag:solved", { type: req.params.type, id: String(item._id), reward });
+
+  res.json({ ok: true, reward, matched });
 });
 
 export const updateEnrollmentProgress = asyncHandler(async (req, res) => {
@@ -226,6 +265,14 @@ export const confirmPurchase = asyncHandler(async (req, res) => {
   purchase.unlockedAt = new Date();
   purchase.expiresAt = durationDays > 0 ? new Date(Date.now() + durationDays * 86400000) : null;
   await purchase.save();
+
+  if (purchase.itemType !== "subscription" && purchase.itemId) {
+    await Enrollment.findOneAndUpdate(
+      { userId: req.user._id, contentType: purchase.itemType, contentId: purchase.itemId },
+      { $setOnInsert: { enrolledAt: new Date(), progress: 0, completed: false } },
+      { upsert: true, new: true, setDefaultsOnInsert: true }
+    );
+  }
 
   res.json({ purchase });
 });
