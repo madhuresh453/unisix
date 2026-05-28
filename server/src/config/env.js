@@ -3,11 +3,18 @@ import dotenv from "dotenv";
 dotenv.config({ path: process.env.ENV_FILE || "../.env" });
 dotenv.config();
 
+const defaultClientOrigins = [
+  "https://uni6ctf.online",
+  "https://www.uni6ctf.online",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000"
+];
+
 export const env = {
   nodeEnv: process.env.NODE_ENV || "development",
   port: Number(process.env.PORT || 5000),
   clientUrl: process.env.CLIENT_URL || "http://localhost:3000",
-  clientUrls: (process.env.CLIENT_URLS || process.env.CLIENT_URL || "http://localhost:3000")
+  clientUrls: (process.env.CLIENT_URLS || process.env.CLIENT_URL || defaultClientOrigins.join(","))
     .split(",")
     .map((origin) => origin.trim())
     .filter(Boolean),
