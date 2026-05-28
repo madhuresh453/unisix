@@ -11,6 +11,7 @@ process.on("unhandledRejection", (err) => {
 import http from "http";
 import { Server } from "socket.io";
 import app from "./src/app.js";
+import { corsOptions } from "./src/config/cors.js";
 import { connectDB } from "./src/config/db.js";
 import { assertProductionSecrets, env } from "./src/config/env.js";
 import { setIO } from "./src/config/socket.js";
@@ -25,25 +26,8 @@ assertProductionSecrets();
 
 const server = http.createServer(app);
 
-const allowedOrigins = new Set([
-  ...env.clientUrls,
-  "http://localhost:3000",
-  "http://127.0.0.1:3000"
-]);
-
-const corsOrigin = (origin, callback) => {
-  if (!origin || allowedOrigins.has(origin)) {
-    return callback(null, true);
-  }
-
-  return callback(new Error("Not allowed by CORS"));
-};
-
 const io = new Server(server, {
-  cors: {
-    origin: corsOrigin,
-    credentials: true
-  }
+  cors: corsOptions
 });
 
 setIO(io);

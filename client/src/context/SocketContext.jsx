@@ -16,7 +16,6 @@ export function SocketProvider({ children }) {
     import("socket.io-client").then(({ io }) => {
       const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || undefined;
       const client = io(socketUrl, {
-        transports: ["websocket"],
         withCredentials: true,
         autoConnect: true
       });
