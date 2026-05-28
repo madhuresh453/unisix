@@ -35,7 +35,9 @@ export async function requireAuth(req, res, next) {
 
 export function requireRole(...roles) {
   return (req, res, next) => {
-    if (!req.user || !roles.includes(req.user.role)) {
+    const isLegacyAdmin = Boolean(req.user?.adminAccess);
+    const effectiveRole = isLegacyAdmin && req.user?.role === "user" ? "admin" : req.user?.role;
+    if (!req.user || !roles.includes(effectiveRole)) {
       return res.status(403).json({ message: "Forbidden." });
     }
 
@@ -49,7 +51,8 @@ export function requireGlobalRole(...roles) {
 
 export function requirePermission(...permissions) {
   return (req, res, next) => {
-    const role = req.user?.role || "user";
+    const isLegacyAdmin = Boolean(req.user?.adminAccess);
+    const role = isLegacyAdmin && req.user?.role === "user" ? "admin" : req.user?.role || "user";
     const granted = getRolePermissions(role);
     if (granted.includes("*") || permissions.every((permission) => granted.includes(permission))) {
       return next();

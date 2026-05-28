@@ -44,6 +44,10 @@ export function AuthProvider({ children }) {
       try {
         const meResult = await authService.me();
         if (!active) return;
+        if (meResult?.token) {
+          window.localStorage.setItem("uni6ctf_token", meResult.token);
+          setToken(meResult.token);
+        }
         setUser(meResult.user);
         window.localStorage.setItem("uni6ctf_user", JSON.stringify(meResult.user));
       } catch {
@@ -56,6 +60,10 @@ export function AuthProvider({ children }) {
           }
           const meResult = await authService.me();
           if (!active) return;
+          if (meResult?.token) {
+            window.localStorage.setItem("uni6ctf_token", meResult.token);
+            setToken(meResult.token);
+          }
           setUser(meResult.user);
           window.localStorage.setItem("uni6ctf_user", JSON.stringify(meResult.user));
         } catch {
@@ -80,6 +88,10 @@ export function AuthProvider({ children }) {
     window.localStorage.setItem("uni6ctf_token", result.token);
     setToken(result.token);
     const meResult = await authService.me().catch(() => ({ user: result.user }));
+    if (meResult?.token) {
+      window.localStorage.setItem("uni6ctf_token", meResult.token);
+      setToken(meResult.token);
+    }
     window.localStorage.setItem("uni6ctf_user", JSON.stringify(meResult.user));
     setUser(meResult.user);
     return { ...result, user: meResult.user };
@@ -109,6 +121,10 @@ export function AuthProvider({ children }) {
   async function refreshUser() {
     if (!token) return null;
     const meResult = await authService.me();
+    if (meResult?.token) {
+      window.localStorage.setItem("uni6ctf_token", meResult.token);
+      setToken(meResult.token);
+    }
     window.localStorage.setItem("uni6ctf_user", JSON.stringify(meResult.user));
     setUser(meResult.user);
     return meResult.user;

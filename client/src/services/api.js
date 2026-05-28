@@ -1,4 +1,16 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
+function resolveApiBase() {
+  const raw = process.env.NEXT_PUBLIC_API_URL;
+  if (raw) {
+    const trimmed = raw.trim().replace(/\/+$/, "");
+    return trimmed.endsWith("/api") ? trimmed : `${trimmed}/api`;
+  }
+
+  if (typeof window !== "undefined" && /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname)) {
+    return "http://localhost:5000/api";
+  }
+
+  return "/api";
+}
 
 function readCookie(name) {
   if (typeof document === "undefined") return "";
@@ -9,6 +21,7 @@ function readCookie(name) {
 }
 
 export async function apiFetch(path, options = {}) {
+  const API_URL = resolveApiBase();
   const token =
     typeof window !== "undefined" ? window.localStorage.getItem("uni6ctf_token") : null;
   const response = await fetch(`${API_URL}${path}`, {

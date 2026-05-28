@@ -12,22 +12,39 @@ export function SocketProvider({ children }) {
   const [connected, setConnected] = useState(false);
 
   useEffect(() => {
-    // Dynamic import to avoid SSR issues with socket.io-client
-    import("socket.io-client").then(({ io }) => {
-      const socketUrl = process.env.NEXT_PUBLIC_SOCKET_URL || undefined;
-      const client = io(socketUrl, {
-        withCredentials: true,
-        autoConnect: true
-      });
+    let active = true;
+    let clientRef = null;
 
-      client.on("connect", () => setConnected(true));
-      client.on("disconnect", () => setConnected(false));
-      setSocket(client);
+    const resolveSocketUrl = () => {
+      if (process.env.NEXT_PUBLIC_SOCKET_URL) return process.env.NEXT_PUBLIC_SOCKET_URL;
+      if (process.env.NEXT_PUBLIC_API_URL) {
+        return process.env.NEXT_PUBLIC_API_URL.replace(/\/api\/?$/, "");
+      }
+      return undefined;
+    };
 
-      return () => client.disconnect();
-    }).catch((error) => {
+    import("socket.io-client")
+      .then(({ io }) => {
+        if (!active) return;
+        const client = io(resolveSocketUrl(), {
+          withCredentials: true,
+          autoConnect: true,
+          transports: ["websocket", "polling"]
+        });
+
+        clientRef = client;
+        client.on("connect", () => setConnected(true));
+        client.on("disconnect", () => setConnected(false));
+        setSocket(client);
+      })
+      .catch((error) => {
       console.warn("Failed to load socket.io-client:", error);
     });
+
+    return () => {
+      active = false;
+      if (clientRef) clientRef.disconnect();
+    };
   }, []);
 
   const value = useMemo(() => ({ socket, connected }), [socket, connected]);

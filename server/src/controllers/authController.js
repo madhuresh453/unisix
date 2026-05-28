@@ -69,7 +69,9 @@ export const login = asyncHandler(async (req, res) => {
 });
 
 export const me = asyncHandler(async (req, res) => {
-  res.json({ user: toPublicUser(req.user) });
+  const nextAccess = signToken(req.user);
+  setAccessCookie(res, nextAccess);
+  res.json({ user: toPublicUser(req.user), token: nextAccess });
 });
 
 export const refresh = asyncHandler(async (req, res) => {

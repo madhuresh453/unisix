@@ -1,6 +1,12 @@
 export function getServerApiBase() {
-  if (process.env.API_INTERNAL_URL) return process.env.API_INTERNAL_URL;
-  if (process.env.NEXT_PUBLIC_API_URL) return process.env.NEXT_PUBLIC_API_URL;
+  if (process.env.API_INTERNAL_URL) {
+    const base = process.env.API_INTERNAL_URL.trim().replace(/\/+$/, "");
+    return base.endsWith("/api") ? base : `${base}/api`;
+  }
+  if (process.env.NEXT_PUBLIC_API_URL) {
+    const base = process.env.NEXT_PUBLIC_API_URL.trim().replace(/\/+$/, "");
+    return base.endsWith("/api") ? base : `${base}/api`;
+  }
   return "http://localhost:5000/api";
 }
 
