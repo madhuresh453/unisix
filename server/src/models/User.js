@@ -17,6 +17,17 @@ const userSchema = new mongoose.Schema(
     score: { type: Number, default: 0 },
     points: { type: Number, default: 0 },
     badges: [{ type: String }],
+    xp: { type: Number, default: 0, index: true },
+    level: { type: Number, default: 1, index: true },
+    rank: { type: String, default: "Script Kiddie", index: true },
+    streaks: {
+      login: { type: Number, default: 0 },
+      learning: { type: Number, default: 0 },
+      challenge: { type: Number, default: 0 },
+      workshop: { type: Number, default: 0 }
+    },
+    subscriptionPlan: { type: String, enum: ["free", "pro", "team", "enterprise", "premium"], default: "free", index: true },
+    notificationPreferences: { type: mongoose.Schema.Types.Mixed, default: {} },
     team: { type: mongoose.Schema.Types.ObjectId, ref: "Team" },
     solvedChallenges: [{ type: mongoose.Schema.Types.ObjectId, ref: "Challenge" }],
     unlockedHints: [

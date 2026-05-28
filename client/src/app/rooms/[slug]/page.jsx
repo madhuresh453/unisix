@@ -1,7 +1,7 @@
-import LearningDetailPage from "@/components/learning/LearningDetailPage";
+import LearningDetailExperience from "@/components/learning/LearningDetailExperience";
 import { fetchLearningDetail } from "@/lib/learningApi";
 
 export default async function Page({ params }) {
   const data = await fetchLearningDetail("rooms", params.slug);
-  return <LearningDetailPage item={data?.item || null} type="rooms" />;
+  return <LearningDetailExperience item={data?.item || null} type="rooms" />;
 }

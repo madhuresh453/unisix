@@ -1,9 +1,5 @@
-import { AdminRouteShell } from "@/components/admin/AdminRouteShell";
+import LearningCmsManager from "@/components/admin/LearningCmsManager";
 
 export default function Page() {
-  return (
-    <AdminRouteShell title="Admin rooms">
-      Manage rooms with RBAC-protected endpoints under <code>/api/learning/admin</code>.
-    </AdminRouteShell>
-  );
+  return <LearningCmsManager type="rooms" />;
 }

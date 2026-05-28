@@ -8,7 +8,9 @@ import { Enrollment } from "../models/Enrollment.js";
 import { Purchase } from "../models/Purchase.js";
 import { Certificate } from "../models/Certificate.js";
 import { Subscription } from "../models/Subscription.js";
+import { Media } from "../models/Media.js";
 import { asyncHandler, pagination } from "../utils/helpers.js";
+import { getIO } from "../config/socket.js";
 
 const MODELS = {
   labs: Lab,
@@ -56,6 +58,30 @@ function sanitizePublicContent(item, user) {
   };
 }
 
+function normalizePricing(payload = {}) {
+  const price = Number(payload.price || 0);
+  const offerPrice = Number(payload.offerPrice || 0);
+  const offerPercentage = price > 0 && offerPrice > 0 ? Math.round(((price - offerPrice) / price) * 100) : Number(payload.offerPercentage || 0);
+  return {
+    price,
+    offerPrice,
+    offerPercentage: Math.max(0, Math.min(100, offerPercentage)),
+    offer: {
+      enabled: Boolean(payload.offer?.enabled || offerPrice > 0),
+      label: payload.offer?.label || (offerPrice > 0 ? "Limited-time deal" : ""),
+      startsAt: payload.offer?.startsAt || null,
+      endsAt: payload.offer?.endsAt || null,
+      featuredDeal: Boolean(payload.offer?.featuredDeal),
+      couponCompatible: payload.offer?.couponCompatible !== false
+    }
+  };
+}
+
+function emitLearningEvent(req, event, payload) {
+  const io = getIO();
+  if (io) io.to("learning:admin").emit(event, payload);
+}
+
 function listFilter(req) {
   return {
     visibility: "public",
@@ -63,8 +89,15 @@ function listFilter(req) {
     ...(req.query.category ? { category: req.query.category } : {}),
     ...(req.query.difficulty ? { difficulty: req.query.difficulty } : {}),
     ...(req.query.premium ? { premium: req.query.premium === "true" } : {}),
-    ...(req.query.search ? { title: { $regex: req.query.search, $options: "i" } } : {})
+    ...(req.query.search ? { title: { $regex: req.query.search, $options: "i" } } : {}),
+    ...(req.query.tag ? { tags: req.query.tag } : {})
   };
+}
+
+function listSort(query = {}) {
+  if (query.sort === "newest") return { createdAt: -1 };
+  if (query.sort === "trending") return { "analytics.views": -1, activeUsers: -1 };
+  return { featured: -1, createdAt: -1 };
 }
 
 export const listLearningContent = asyncHandler(async (req, res) => {
@@ -73,7 +106,7 @@ export const listLearningContent = asyncHandler(async (req, res) => {
   const filter = listFilter(req);
 
   const [items, total] = await Promise.all([
-    model.find(filter).sort({ featured: -1, createdAt: -1 }).skip(skip).limit(limit).lean(),
+    model.find(filter).sort(listSort(req.query)).skip(skip).limit(limit).lean(),
     model.countDocuments(filter)
   ]);
 
@@ -84,6 +117,7 @@ export const getLearningContent = asyncHandler(async (req, res) => {
   const model = pickModel(req.params.type);
   const item = await model.findOne({ slug: req.params.slug, visibility: { $ne: "private" } });
   if (!item) return res.status(404).json({ message: "Content not found." });
+  await model.updateOne({ _id: item._id }, { $inc: { "analytics.views": 1 } }).catch(() => null);
   res.json({ item: sanitizePublicContent(item, req.user) });
 });
 
@@ -104,6 +138,12 @@ export const enrollLearningContent = asyncHandler(async (req, res) => {
     { $setOnInsert: { enrolledAt: new Date(), progress: 0, completed: false } },
     { upsert: true, new: true, setDefaultsOnInsert: true }
   );
+
+  await model.updateOne(
+    { _id: item._id },
+    { $inc: { enrolledCount: 1, "analytics.enrollments": 1, "analytics.starts": 1 } }
+  ).catch(() => null);
+  emitLearningEvent(req, "learning:enrollment", { type: req.params.type, id: String(item._id) });
 
   res.status(201).json({ enrollment });
 });
@@ -242,28 +282,99 @@ export const verifyCertificate = asyncHandler(async (req, res) => {
 
 export const adminListContent = asyncHandler(async (req, res) => {
   const model = pickModel(req.params.type);
-  const items = await model.find({}).sort({ createdAt: -1 }).lean();
-  res.json({ items });
+  const { limit, skip, page } = pagination(req.query);
+  const filter = {
+    ...(req.query.status ? { status: req.query.status } : {}),
+    ...(req.query.visibility ? { visibility: req.query.visibility } : {}),
+    ...(req.query.premium ? { premium: req.query.premium === "true" } : {}),
+    ...(req.query.search ? { title: { $regex: req.query.search, $options: "i" } } : {})
+  };
+  const [items, total] = await Promise.all([
+    model.find(filter).sort(listSort(req.query)).skip(skip).limit(limit).lean(),
+    model.countDocuments(filter)
+  ]);
+  res.json({ page, total, items });
 });
 
 export const adminCreateContent = asyncHandler(async (req, res) => {
   const model = pickModel(req.params.type);
   const slug = req.body.slug || slugify(req.body.title || "item", { lower: true, strict: true });
-  const item = await model.create({ ...req.body, slug, createdBy: req.user._id });
+  const item = await model.create({ ...req.body, ...normalizePricing(req.body), slug, createdBy: req.user._id });
+  emitLearningEvent(req, "learning:admin:created", { type: req.params.type, id: String(item._id) });
   res.status(201).json({ item });
 });
 
 export const adminUpdateContent = asyncHandler(async (req, res) => {
   const model = pickModel(req.params.type);
-  const item = await model.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+  const update = { ...req.body };
+  if ("price" in req.body || "offerPrice" in req.body || "offer" in req.body) {
+    Object.assign(update, normalizePricing(req.body));
+  }
+  const item = await model.findByIdAndUpdate(req.params.id, { $set: update }, { new: true });
   if (!item) return res.status(404).json({ message: "Content not found." });
+  emitLearningEvent(req, "learning:admin:updated", { type: req.params.type, id: String(item._id) });
   res.json({ item });
 });
 
 export const adminDeleteContent = asyncHandler(async (req, res) => {
   const model = pickModel(req.params.type);
   await model.findByIdAndDelete(req.params.id);
+  emitLearningEvent(req, "learning:admin:deleted", { type: req.params.type, id: req.params.id });
   res.status(204).send();
+});
+
+export const adminBulkContent = asyncHandler(async (req, res) => {
+  const model = pickModel(req.params.type);
+  const ids = Array.isArray(req.body.ids) ? req.body.ids : [];
+  if (!ids.length) return res.status(422).json({ message: "Select at least one item." });
+
+  if (req.body.action === "delete") {
+    const result = await model.deleteMany({ _id: { $in: ids } });
+    emitLearningEvent(req, "learning:admin:bulk", { type: req.params.type, action: "delete", count: result.deletedCount });
+    return res.json({ deleted: result.deletedCount });
+  }
+
+  const update = {};
+  if (req.body.action === "publish") update.status = "published";
+  if (req.body.action === "unpublish") update.status = "draft";
+  if (req.body.action === "feature") update.featured = true;
+  if (req.body.action === "unfeature") update.featured = false;
+  if (req.body.action === "pricing") Object.assign(update, normalizePricing(req.body.pricing || {}));
+  if (!Object.keys(update).length) return res.status(422).json({ message: "Unsupported bulk action." });
+
+  const result = await model.updateMany({ _id: { $in: ids } }, { $set: update });
+  emitLearningEvent(req, "learning:admin:bulk", { type: req.params.type, action: req.body.action, count: result.modifiedCount });
+  res.json({ modified: result.modifiedCount });
+});
+
+export const adminLearningAnalytics = asyncHandler(async (req, res) => {
+  const [labs, rooms, courses, workshops, purchases, enrollments] = await Promise.all([
+    Lab.find({}).sort({ "analytics.views": -1 }).limit(8).select("title analytics enrolledCount activeUsers price offerPrice").lean(),
+    Room.find({}).sort({ "analytics.views": -1 }).limit(8).select("title analytics activeUsers liveParticipantCount price offerPrice").lean(),
+    Course.find({}).sort({ "analytics.enrollments": -1 }).limit(8).select("title analytics enrolledCount rating price offerPrice").lean(),
+    Workshop.find({}).sort({ "analytics.registrations": -1 }).limit(8).select("title analytics attendeeCount seats price offerPrice").lean(),
+    Purchase.aggregate([
+      { $match: { paymentStatus: "paid" } },
+      { $group: { _id: "$itemType", revenue: { $sum: "$amount" }, purchases: { $sum: 1 } } }
+    ]),
+    Enrollment.aggregate([
+      { $group: { _id: "$contentType", enrollments: { $sum: 1 }, avgProgress: { $avg: "$progress" }, completions: { $sum: { $cond: ["$completed", 1, 0] } } } }
+    ])
+  ]);
+
+  res.json({ top: { labs, rooms, courses, workshops }, revenue: purchases, progress: enrollments });
+});
+
+export const adminListMedia = asyncHandler(async (req, res) => {
+  const media = await Media.find({}).sort({ createdAt: -1 }).limit(500).lean();
+  res.json({ media });
+});
+
+export const adminCreateMedia = asyncHandler(async (req, res) => {
+  const allowed = ["image/png", "image/jpeg", "image/webp", "video/mp4", "application/pdf", "text/markdown", "application/zip"];
+  if (!allowed.includes(req.body.mimeType)) return res.status(422).json({ message: "Unsupported media type." });
+  const media = await Media.create({ ...req.body, uploadedBy: req.user._id });
+  res.status(201).json({ media });
 });
 
 export const adminFinancials = asyncHandler(async (req, res) => {

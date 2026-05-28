@@ -18,7 +18,12 @@ export function toPublicUser(user) {
     country: user.country,
     score: user.score,
     badges: user.badges,
-    team: user.team
+    team: user.team,
+    xp: user.xp || 0,
+    level: user.level || 1,
+    rank: user.rank || "Script Kiddie",
+    streaks: user.streaks || {},
+    subscriptionPlan: user.subscriptionPlan || "free"
   };
 }
 

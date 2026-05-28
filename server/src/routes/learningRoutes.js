@@ -4,8 +4,12 @@ import {
   adminCreateContent,
   adminDeleteContent,
   adminFinancials,
+  adminBulkContent,
+  adminCreateMedia,
+  adminLearningAnalytics,
   adminListCertificates,
   adminListContent,
+  adminListMedia,
   adminListPayments,
   adminListSubscriptions,
   adminUpdateContent,
@@ -63,8 +67,12 @@ router.get("/certificates/verify/:certificateId", verifyCertificate);
 
 router.get("/admin/:type(labs|rooms|courses|workshops)", requireAuth, requirePermission("admin:access"), adminListContent);
 router.post("/admin/:type(labs|rooms|courses|workshops)", requireAuth, requirePermission("admin:access"), body("title").trim().isLength({ min: 2 }), validate, adminCreateContent);
+router.patch("/admin/:type(labs|rooms|courses|workshops)/bulk", requireAuth, requirePermission("admin:access"), adminBulkContent);
 router.put("/admin/:type(labs|rooms|courses|workshops)/:id", requireAuth, requirePermission("admin:access"), param("id").isMongoId(), validate, adminUpdateContent);
 router.delete("/admin/:type(labs|rooms|courses|workshops)/:id", requireAuth, requirePermission("admin:access"), param("id").isMongoId(), validate, adminDeleteContent);
+router.get("/admin/analytics/overview", requireAuth, requirePermission("admin:access"), adminLearningAnalytics);
+router.get("/admin/media", requireAuth, requirePermission("admin:access"), adminListMedia);
+router.post("/admin/media", requireAuth, requirePermission("admin:access"), body("filename").trim().isLength({ min: 2 }), body("originalName").trim().isLength({ min: 2 }), body("mimeType").trim().isLength({ min: 3 }), body("url").trim().isLength({ min: 2 }), validate, adminCreateMedia);
 router.get("/admin/financials/overview", requireAuth, requirePermission("admin:access"), adminFinancials);
 router.get("/admin/certificates", requireAuth, requirePermission("admin:access"), adminListCertificates);
 router.get("/admin/payments", requireAuth, requirePermission("admin:access"), adminListPayments);

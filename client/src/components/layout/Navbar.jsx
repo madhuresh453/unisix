@@ -20,12 +20,14 @@ import {
 import { cn } from "@/utils/helpers";
 import { Button } from "@/components/ui/Button";
 import { useAuth } from "@/hooks/useAuth";
+import { NotificationCenter } from "@/components/layout/NotificationCenter";
 
 function Navbar() {
   const pathname = usePathname();
 
   const [open, setOpen] = useState(false);
   const [academyOpen, setAcademyOpen] = useState(false);
+  const [academyDesktopOpen, setAcademyDesktopOpen] = useState(false);
   const [profileOpen, setProfileOpen] = useState(false);
   const { user, isAuthenticated, loading, signOut } = useAuth();
   const mainNav = getMainNavigation({ user, isAuthenticated });
@@ -36,6 +38,7 @@ function Navbar() {
   useEffect(() => {
     setOpen(false);
     setAcademyOpen(false);
+    setAcademyDesktopOpen(false);
     setProfileOpen(false);
   }, [pathname]);
 
@@ -77,6 +80,9 @@ function Navbar() {
                 <div key={link.label} className="group relative inline-flex h-[88px] items-center">
                   <button
                     type="button"
+                    aria-haspopup="menu"
+                    aria-expanded={academyDesktopOpen}
+                    onClick={() => setAcademyDesktopOpen((prev) => !prev)}
                     className={cn(
                       "group relative inline-flex h-[88px] items-center gap-1.5 whitespace-nowrap text-[12px] font-black uppercase tracking-[0.1em] transition-all duration-300 ease-out",
                       groupActive ? "text-cyber-red" : "text-white hover:text-cyber-red"
@@ -93,7 +99,7 @@ function Navbar() {
                       )}
                     />
                   </button>
-                  <div className="pointer-events-none absolute left-1/2 top-[84px] z-50 min-w-[220px] -translate-x-1/2 rounded-xl border border-white/[0.08] bg-[#050505]/98 p-2 opacity-0 shadow-[0_8px_30px_rgba(0,0,0,0.65)] backdrop-blur-xl transition-all duration-300 group-hover:pointer-events-auto group-hover:opacity-100">
+                  <div className={cn("absolute left-1/2 top-[84px] z-50 min-w-[220px] -translate-x-1/2 rounded-xl border border-white/[0.08] bg-[#050505]/98 p-2 shadow-[0_8px_30px_rgba(0,0,0,0.65)] backdrop-blur-xl transition-all duration-300", academyDesktopOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0 group-hover:pointer-events-auto group-hover:opacity-100")}>
                     {link.items.map((item) => {
                       const active = isNavItemActive(pathname, item.href);
                       const lockState = getLockState(item, user);
@@ -173,6 +179,7 @@ function Navbar() {
           ) : null}
           {!loading && isAuthenticated ? (
             <>
+              <NotificationCenter />
               {isAdmin ? (
                 <Button href="/admin/dashboard" variant="secondary" className="min-h-[44px] whitespace-nowrap rounded-xl px-5 py-2.5 text-[12px] font-black uppercase tracking-[0.14em]">
                   Admin Panel
@@ -232,6 +239,8 @@ function Navbar() {
                 <div key={link.label} className="overflow-hidden rounded-xl border border-transparent">
                   <button
                     type="button"
+                    aria-haspopup="menu"
+                    aria-expanded={academyOpen}
                     onClick={() => setAcademyOpen((prev) => !prev)}
                     className={cn(
                       "flex w-full items-center justify-between rounded-xl border px-4 py-3 text-sm font-black uppercase tracking-[0.12em] transition-all duration-300",

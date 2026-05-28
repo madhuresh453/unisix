@@ -1,6 +1,5 @@
-"use client";
-import { AdminRouteShell } from "@/components/admin/AdminRouteShell";
+import { MediaLibraryAdmin } from "@/components/admin/LearningCmsManager";
 
 export default function Page() {
-  return <AdminRouteShell title="Admin Media">Media management is available in dashboard sections.</AdminRouteShell>;
+  return <MediaLibraryAdmin />;
 }

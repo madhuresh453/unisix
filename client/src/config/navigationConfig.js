@@ -11,9 +11,11 @@ import {
   LayoutDashboard,
   Lock,
   Receipt,
+  Bell,
   ScrollText,
   Settings,
   Shield,
+  Tags,
   Trophy,
   Users,
   Wallet
@@ -43,9 +45,12 @@ export function getMainNavigation({ isAuthenticated }) {
         { label: "Rooms", href: "/rooms" },
         { label: "Courses", href: "/courses" },
         { label: "Workshops", href: "/workshops" },
-        { label: "Learning Paths", href: "/courses", premium: true, lockedLabel: "Soon" }
+        { label: "Learning Paths", href: "/paths", premium: true, lockedLabel: "Soon" },
+        { label: "Dashboard", href: "/dashboard/learning" },
+        { label: "Certificates", href: "/dashboard/certificates", premium: true }
       ]
     },
+    { label: "Mentors", href: "/mentors" },
     { label: "Leaderboard", href: "/leaderboard" },
     { label: "Writeups", href: "/writeups" },
     { label: "Sponsors", href: "/sponsors" },
@@ -65,7 +70,8 @@ export function getProfileNavigation({ user, isAuthenticated }) {
     { label: "My Learning", href: "/dashboard/learning" },
     { label: "Certificates", href: "/dashboard/certificates", premium: true },
     { label: "Payments", href: "/dashboard/payments" },
-    { label: "Subscriptions", href: "/dashboard/subscriptions" }
+    { label: "Subscriptions", href: "/dashboard/subscriptions" },
+    { label: "Notifications", href: "/dashboard/notifications" }
   ];
 
   if (isAdmin(user)) {
@@ -87,9 +93,10 @@ export function getDashboardNavigation({ user }) {
     { label: "Workshops", href: "/dashboard/workshops", icon: Users },
     { label: "Certificates", href: "/dashboard/certificates", icon: ScrollText, premium: true, locked: !premium },
     { label: "Progress", href: "/dashboard/progress", icon: Trophy },
-    { label: "Bookmarks", href: "/dashboard/challenges", icon: BadgeCheck },
+    { label: "Bookmarks", href: "/dashboard/bookmarks", icon: BadgeCheck },
     { label: "Payments", href: "/dashboard/payments", icon: Receipt },
     { label: "Subscriptions", href: "/dashboard/subscriptions", icon: Wallet },
+    { label: "Notifications", href: "/dashboard/notifications", icon: Bell },
     { label: "Activity", href: "/dashboard/activity", icon: Activity },
     { label: "Submissions", href: "/dashboard/submissions", icon: Flag },
     { label: "Settings", href: "/dashboard/settings", icon: Settings }
@@ -103,9 +110,14 @@ export function getAdminNavigation() {
     { label: "Rooms CMS", href: "/admin/rooms", icon: Shield },
     { label: "Courses CMS", href: "/admin/courses", icon: BookOpen },
     { label: "Workshops CMS", href: "/admin/workshops", icon: Users },
+    { label: "Offers & Pricing", href: "/admin/offers", icon: Tags },
+    { label: "Analytics", href: "/admin/analytics", icon: CircuitBoard },
+    { label: "Media Library", href: "/admin/media", icon: BadgeCheck },
     { label: "Certificates", href: "/admin/certificates", icon: ScrollText },
     { label: "Payments", href: "/admin/payments", icon: CreditCard },
     { label: "Subscriptions", href: "/admin/subscriptions", icon: Wallet },
+    { label: "Learning Paths", href: "/admin/paths", icon: Trophy },
+    { label: "Mentors", href: "/admin/mentors", icon: Users },
     { label: "Learning Analytics", href: "/admin/dashboard", icon: CircuitBoard }
   ];
 }

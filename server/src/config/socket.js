@@ -17,3 +17,8 @@ export function emitNotification(userId, notification) {
   if (!ioInstance) return;
   ioInstance.to(`user:${userId}`).emit("notification:new", notification);
 }
+
+export function emitActivity(activity) {
+  if (!ioInstance) return;
+  ioInstance.to("platform:activity").emit("activity:new", activity);
+}
