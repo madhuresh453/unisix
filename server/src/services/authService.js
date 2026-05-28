@@ -1,5 +1,5 @@
 import { User } from "../models/User.js";
-import { signToken } from "../utils/token.js";
+import { signRefreshToken, signToken } from "../utils/token.js";
 import { env } from "../config/env.js";
 import { toPublicUser } from "../utils/helpers.js";
 
@@ -29,7 +29,8 @@ export async function registerUser(payload) {
 
   return {
     user: toPublicUser(user),
-    token: signToken(user)
+    token: signToken(user),
+    refreshToken: signRefreshToken(user)
   };
 }
 
@@ -78,6 +79,7 @@ export async function loginUser({ email, password }) {
 
   return {
     user: toPublicUser(user),
-    token
+    token,
+    refreshToken: signRefreshToken(user)
   };
 }

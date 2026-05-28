@@ -25,3 +25,15 @@ export function isAdminRole(role) {
 export function getRolePermissions(role) {
   return rolePermissions[role] || [];
 }
+
+export const eventRolePermissions = {
+  ctf_admin: ["*", "admin:panel"],
+  ctf_moderator: ["admin:panel", "submissions:moderate", "users:manage", "notifications:manage", "scoreboard:view"],
+  challenge_author: ["admin:panel", "challenges:manage", "pages:manage"],
+  scoreboard_manager: ["admin:panel", "scoreboard:manage", "statistics:view"],
+  participant: ["scoreboard:view"]
+};
+
+export function getEventRolePermissions(role) {
+  return eventRolePermissions[role] || [];
+}

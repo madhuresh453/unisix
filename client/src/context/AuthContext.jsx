@@ -47,11 +47,24 @@ export function AuthProvider({ children }) {
         setUser(meResult.user);
         window.localStorage.setItem("uni6ctf_user", JSON.stringify(meResult.user));
       } catch {
-        if (!active) return;
-        window.localStorage.removeItem("uni6ctf_token");
-        window.localStorage.removeItem("uni6ctf_user");
-        setToken(null);
-        setUser(null);
+        try {
+          const refreshed = await authService.refresh();
+          if (!active) return;
+          if (refreshed?.token) {
+            window.localStorage.setItem("uni6ctf_token", refreshed.token);
+            setToken(refreshed.token);
+          }
+          const meResult = await authService.me();
+          if (!active) return;
+          setUser(meResult.user);
+          window.localStorage.setItem("uni6ctf_user", JSON.stringify(meResult.user));
+        } catch {
+          if (!active) return;
+          window.localStorage.removeItem("uni6ctf_token");
+          window.localStorage.removeItem("uni6ctf_user");
+          setToken(null);
+          setUser(null);
+        }
       } finally {
         if (active) setLoading(false);
       }
@@ -82,7 +95,8 @@ export function AuthProvider({ children }) {
     return persistSession(result);
   }
 
-  function signOut({ redirectTo = "/" } = {}) {
+  async function signOut({ redirectTo = "/" } = {}) {
+    await authService.logout().catch(() => null);
     window.localStorage.removeItem("uni6ctf_token");
     window.localStorage.removeItem("uni6ctf_user");
     setToken(null);

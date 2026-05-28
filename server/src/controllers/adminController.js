@@ -18,6 +18,8 @@ import { User } from "../models/User.js";
 import { Writeup } from "../models/Writeup.js";
 import { env } from "../config/env.js";
 import { asyncHandler } from "../utils/helpers.js";
+import { CTFEvent } from "../models/CTFEvent.js";
+import { EventMember } from "../models/EventMember.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -230,4 +232,56 @@ export const upsertGlobalSettings = asyncHandler(async (req, res) => {
 export const listAuditLogs = asyncHandler(async (req, res) => {
   const logs = await AuditLog.find().sort({ createdAt: -1 }).limit(200).lean();
   res.json({ logs });
+});
+
+export const listCTFEvents = asyncHandler(async (req, res) => {
+  const events = await CTFEvent.find({}).sort({ createdAt: -1 }).lean();
+  res.json({ events });
+});
+
+export const createCTFEvent = asyncHandler(async (req, res) => {
+  const event = await CTFEvent.create({
+    ...req.body,
+    createdBy: req.user._id
+  });
+  res.status(201).json({ event });
+});
+
+export const updateCTFEvent = asyncHandler(async (req, res) => {
+  const event = await CTFEvent.findByIdAndUpdate(req.params.id, { $set: req.body }, { new: true });
+  if (!event) return res.status(404).json({ message: "CTF event not found." });
+  res.json({ event });
+});
+
+export const deleteCTFEvent = asyncHandler(async (req, res) => {
+  await CTFEvent.findByIdAndDelete(req.params.id);
+  await EventMember.deleteMany({ ctfId: req.params.id });
+  res.status(204).send();
+});
+
+export const assignCTFAdmin = asyncHandler(async (req, res) => {
+  const event = await CTFEvent.findById(req.params.id);
+  if (!event) return res.status(404).json({ message: "CTF event not found." });
+
+  const user = await User.findById(req.body.userId);
+  if (!user) return res.status(404).json({ message: "User not found." });
+
+  const role = req.body.role || "ctf_admin";
+  await EventMember.findOneAndUpdate(
+    { ctfId: event._id, userId: user._id },
+    {
+      $set: {
+        role,
+        permissions: req.body.permissions || [],
+        assignedBy: req.user._id
+      }
+    },
+    { upsert: true, new: true, setDefaultsOnInsert: true }
+  );
+
+  if (role === "ctf_admin") {
+    await CTFEvent.updateOne({ _id: event._id }, { $addToSet: { admins: user._id } });
+  }
+
+  res.json({ ok: true });
 });

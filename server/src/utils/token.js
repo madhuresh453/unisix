@@ -16,3 +16,14 @@ export function signToken(user) {
 export function verifyToken(token) {
   return jwt.verify(token, env.jwtSecret);
 }
+
+export function signRefreshToken(user) {
+  return jwt.sign(
+    {
+      sub: user._id.toString(),
+      type: "refresh"
+    },
+    env.jwtSecret,
+    { expiresIn: "30d" }
+  );
+}

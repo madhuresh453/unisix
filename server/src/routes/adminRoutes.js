@@ -3,16 +3,21 @@ import { body, param } from "express-validator";
 import {
   createNotification,
   createTeamMember,
+  createCTFEvent,
   deleteMedia,
   deleteNotification,
+  deleteCTFEvent,
   deleteTeamMember,
   getAboutSettings,
   getDashboardAnalytics,
+  listCTFEvents,
   getHomepageSettings,
   listMedia,
   listNotifications,
   listAuditLogs,
   listTeamMembers,
+  assignCTFAdmin,
+  updateCTFEvent,
   updateNotification,
   updateTeamMember,
   uploadMediaBase64,
@@ -73,5 +78,11 @@ router.delete("/media/:id", param("id").isMongoId(), validate, deleteMedia);
 router.get("/settings", getGlobalSettings);
 router.put("/settings", upsertGlobalSettings);
 router.get("/audit-logs", listAuditLogs);
+
+router.get("/ctfs", listCTFEvents);
+router.post("/ctfs", body("name").trim().isLength({ min: 3 }), body("slug").trim().isLength({ min: 3 }), body("description").trim().isLength({ min: 10 }), body("startTime").isISO8601(), body("endTime").isISO8601(), validate, createCTFEvent);
+router.put("/ctfs/:id", param("id").isMongoId(), validate, updateCTFEvent);
+router.delete("/ctfs/:id", param("id").isMongoId(), validate, deleteCTFEvent);
+router.post("/ctfs/:id/assign-admin", param("id").isMongoId(), body("userId").isMongoId(), body("role").optional().trim(), validate, assignCTFAdmin);
 
 export default router;

@@ -5,7 +5,15 @@ import { getRolePermissions } from "../security/rbac.js";
 export async function requireAuth(req, res, next) {
   try {
     const header = req.headers.authorization || "";
-    const token = header.startsWith("Bearer ") ? header.slice(7) : null;
+    const cookieRaw = req.headers.cookie || "";
+    const cookieToken = cookieRaw
+      .split(";")
+      .map((part) => part.trim())
+      .find((part) => part.startsWith("uni6ctf_token="))
+      ?.split("=")
+      .slice(1)
+      .join("=");
+    const token = header.startsWith("Bearer ") ? header.slice(7) : cookieToken || null;
 
     if (!token) {
       return res.status(401).json({ message: "Authentication required." });
@@ -33,6 +41,10 @@ export function requireRole(...roles) {
 
     return next();
   };
+}
+
+export function requireGlobalRole(...roles) {
+  return requireRole(...roles);
 }
 
 export function requirePermission(...permissions) {
