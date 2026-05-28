@@ -1,10 +1,11 @@
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 export async function apiFetch(path, options = {}) {
   const token =
     typeof window !== "undefined" ? window.localStorage.getItem("uni6ctf_token") : null;
   const response = await fetch(`${API_URL}${path}`, {
     ...options,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),

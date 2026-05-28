@@ -7,6 +7,10 @@ export const env = {
   nodeEnv: process.env.NODE_ENV || "development",
   port: Number(process.env.PORT || 5000),
   clientUrl: process.env.CLIENT_URL || "http://localhost:3000",
+  clientUrls: (process.env.CLIENT_URLS || process.env.CLIENT_URL || "http://localhost:3000")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean),
   mongoUri: process.env.MONGODB_URI || "mongodb://localhost:27017/uni6ctf",
   jwtSecret: process.env.JWT_SECRET || "dev-only-change-this-long-secret",
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || "7d",
