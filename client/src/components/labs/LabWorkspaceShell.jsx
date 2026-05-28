@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { AlertTriangle, ArrowRight, CheckCircle2, Clipboard, Download, FileText, Flag, Lock, MapPin, ShieldCheck, Sparkles, Stopwatch, Users } from "lucide-react";
+import { AlertTriangle, ArrowRight, CheckCircle2, Clipboard, Download, FileText, Flag, Lock, MapPin, ShieldCheck, Sparkles, Timer, Users } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSocket } from "@/hooks/useSocket";
 import { Button } from "@/components/ui/Button";
@@ -213,7 +213,7 @@ export default function LabWorkspaceShell({ lab, labInstance, canAccess }) {
                 <div className="mt-4 grid gap-3 text-sm text-cyber-muted">
                   <StatTile label="Active users" value={workspace.lab.activeUsers || 0} icon={Users} />
                   <StatTile label="XP earned" value={`${workspace.progress.xpEarned || 0}`} icon={Sparkles} />
-                  <StatTile label="Session time" value={`${Math.floor((workspace.progress.timeSpent || 0) / 60)} min`} icon={Stopwatch} />
+<StatTile label="Session time" value={`${Math.floor((workspace.progress.timeSpent || 0) / 60)} min`} icon={Timer} />
                 </div>
               </div>
             </div>

@@ -3,12 +3,14 @@
 import { useEffect, useState } from "react";
 import { getLearningPath } from "@/services/pathMentorService";
 
-export default function Page({ params }) {
+export default async function Page({ params }) {
+  const { slug } = await params;
   const [item, setItem] = useState(null);
 
   useEffect(() => {
-    getLearningPath(params.slug).then((x) => setItem(x.item || null)).catch(() => setItem(null));
-  }, [params.slug]);
+    getLearningPath(slug).then((x) => setItem(x.item || null)).catch(() => setItem(null));
+  }, [slug]);
+
 
   if (!item) return <main className="mx-auto max-w-7xl px-4 py-10 text-white">Path not found.</main>;
 

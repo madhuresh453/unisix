@@ -36,7 +36,6 @@ router.get("/:id/status", requireAuth, param("id").isMongoId(), validate, getLab
 router.post("/:id/reset", requireAuth, param("id").isMongoId(), validate, resetLabInstance);
 router.post("/:id/terminate", requireAuth, param("id").isMongoId(), validate, terminateLabInstance);
 router.post(
-router.post(
   "/:id/extend",
   requireAuth,
   param("id").isMongoId(),
