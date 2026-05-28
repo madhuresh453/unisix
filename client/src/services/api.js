@@ -12,32 +12,48 @@ function resolveApiBase() {
   return "/api";
 }
 
-function readCookie(name) {
-  if (typeof document === "undefined") return "";
-  const value = `; ${document.cookie}`;
-  const parts = value.split(`; ${name}=`);
-  if (parts.length === 2) return parts.pop().split(";").shift() || "";
-  return "";
+let csrfTokenCache = "";
+
+function isSafeMethod(method) {
+  return ["GET", "HEAD", "OPTIONS"].includes(String(method || "GET").toUpperCase());
 }
 
-export async function apiFetch(path, options = {}) {
+async function getCsrfToken(apiBase) {
+  if (csrfTokenCache) return csrfTokenCache;
+  const response = await fetch(`${apiBase}/auth/csrf`, { method: "GET", credentials: "include" });
+  const data = await response.json().catch(() => ({}));
+  csrfTokenCache = data?.csrfToken || response.headers.get("x-csrf-token") || "";
+  return csrfTokenCache;
+}
+
+export async function apiFetch(path, options = {}, retry = false) {
   const API_URL = resolveApiBase();
   const token =
     typeof window !== "undefined" ? window.localStorage.getItem("uni6ctf_token") : null;
+  const method = String(options.method || "GET").toUpperCase();
+  const csrfToken = isSafeMethod(method) ? "" : await getCsrfToken(API_URL);
+
   const response = await fetch(`${API_URL}${path}`, {
     ...options,
     credentials: "include",
     headers: {
       "Content-Type": "application/json",
-      ...(!["GET", "HEAD", "OPTIONS"].includes(String(options.method || "GET").toUpperCase())
-        ? { "x-csrf-token": readCookie("uni6ctf_csrf") }
-        : {}),
+      ...(csrfToken ? { "x-csrf-token": csrfToken } : {}),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...(options.headers || {})
     }
   });
 
+  const headerCsrf = response.headers.get("x-csrf-token");
+  if (headerCsrf) csrfTokenCache = headerCsrf;
+
   const data = await response.json().catch(() => ({}));
+
+  if (!response.ok && response.status === 403 && data?.message === "Invalid CSRF token." && !retry) {
+    csrfTokenCache = "";
+    await getCsrfToken(API_URL);
+    return apiFetch(path, options, true);
+  }
 
   if (!response.ok) {
     throw new Error(data.message || "Request failed");

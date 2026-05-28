@@ -28,5 +28,8 @@ export function validateCorsOrigin(origin, callback) {
 
 export const corsOptions = {
   origin: validateCorsOrigin,
-  credentials: true
+  credentials: true,
+  methods: ["GET", "HEAD", "OPTIONS", "POST", "PUT", "PATCH", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
+  exposedHeaders: ["x-csrf-token"]
 };

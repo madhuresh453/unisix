@@ -7,7 +7,8 @@ import { env } from "../config/env.js";
 
 function setRefreshCookie(res, token) {
   const secure = env.nodeEnv === "production";
-  const cookie = `uni6ctf_refresh=${token}; Path=/; HttpOnly; SameSite=Lax${secure ? "; Secure" : ""}; Max-Age=${60 * 60 * 24 * 30}`;
+  const sameSite = secure ? "None" : "Lax";
+  const cookie = `uni6ctf_refresh=${token}; Path=/; HttpOnly; SameSite=${sameSite}${secure ? "; Secure" : ""}; Max-Age=${60 * 60 * 24 * 30}`;
   const current = res.getHeader("Set-Cookie");
   if (!current) res.setHeader("Set-Cookie", cookie);
   else if (Array.isArray(current)) res.setHeader("Set-Cookie", [...current, cookie]);
@@ -16,7 +17,8 @@ function setRefreshCookie(res, token) {
 
 function setAccessCookie(res, token) {
   const secure = env.nodeEnv === "production";
-  const cookie = `uni6ctf_token=${token}; Path=/; HttpOnly; SameSite=Lax${secure ? "; Secure" : ""}; Max-Age=${60 * 60 * 24 * 7}`;
+  const sameSite = secure ? "None" : "Lax";
+  const cookie = `uni6ctf_token=${token}; Path=/; HttpOnly; SameSite=${sameSite}${secure ? "; Secure" : ""}; Max-Age=${60 * 60 * 24 * 7}`;
   const current = res.getHeader("Set-Cookie");
   if (!current) res.setHeader("Set-Cookie", cookie);
   else if (Array.isArray(current)) res.setHeader("Set-Cookie", [...current, cookie]);
@@ -25,7 +27,8 @@ function setAccessCookie(res, token) {
 
 function clearRefreshCookie(res) {
   const secure = env.nodeEnv === "production";
-  const cookie = `uni6ctf_refresh=; Path=/; HttpOnly; SameSite=Lax${secure ? "; Secure" : ""}; Max-Age=0`;
+  const sameSite = secure ? "None" : "Lax";
+  const cookie = `uni6ctf_refresh=; Path=/; HttpOnly; SameSite=${sameSite}${secure ? "; Secure" : ""}; Max-Age=0`;
   const current = res.getHeader("Set-Cookie");
   if (!current) res.setHeader("Set-Cookie", cookie);
   else if (Array.isArray(current)) res.setHeader("Set-Cookie", [...current, cookie]);
@@ -34,7 +37,8 @@ function clearRefreshCookie(res) {
 
 function clearAccessCookie(res) {
   const secure = env.nodeEnv === "production";
-  const cookie = `uni6ctf_token=; Path=/; HttpOnly; SameSite=Lax${secure ? "; Secure" : ""}; Max-Age=0`;
+  const sameSite = secure ? "None" : "Lax";
+  const cookie = `uni6ctf_token=; Path=/; HttpOnly; SameSite=${sameSite}${secure ? "; Secure" : ""}; Max-Age=0`;
   const current = res.getHeader("Set-Cookie");
   if (!current) res.setHeader("Set-Cookie", cookie);
   else if (Array.isArray(current)) res.setHeader("Set-Cookie", [...current, cookie]);
@@ -98,6 +102,11 @@ export const refresh = asyncHandler(async (req, res) => {
   setRefreshCookie(res, nextRefresh);
 
   return res.json({ token: nextAccess, refreshToken: nextRefresh, user: toPublicUser(user) });
+});
+
+export const csrf = asyncHandler(async (req, res) => {
+  const token = req.csrfToken || "";
+  return res.json({ csrfToken: token });
 });
 
 export const logout = asyncHandler(async (req, res) => {

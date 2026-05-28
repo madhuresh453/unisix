@@ -21,9 +21,20 @@ export async function requireAuth(req, res, next) {
 
     const payload = verifyToken(token);
     const user = await User.findById(payload.sub);
+    const debug = process.env.AUTH_DEBUG === "true";
 
     if (!user) {
       return res.status(401).json({ message: "Invalid session." });
+    }
+
+    if (debug) {
+      console.log("[AUTH_DEBUG] requireAuth success", {
+        path: req.path,
+        userId: String(user._id),
+        role: user.role,
+        hasAuthHeader: header.startsWith("Bearer "),
+        hasCookieToken: Boolean(cookieToken)
+      });
     }
 
     req.user = user;
@@ -54,8 +65,17 @@ export function requirePermission(...permissions) {
     const isLegacyAdmin = Boolean(req.user?.adminAccess);
     const role = isLegacyAdmin && req.user?.role === "user" ? "admin" : req.user?.role || "user";
     const granted = getRolePermissions(role);
+    const debug = process.env.AUTH_DEBUG === "true";
     if (granted.includes("*") || permissions.every((permission) => granted.includes(permission))) {
       return next();
+    }
+    if (debug) {
+      console.log("[AUTH_DEBUG] requirePermission blocked", {
+        path: req.path,
+        role,
+        required: permissions,
+        granted
+      });
     }
     return res.status(403).json({ message: "Forbidden." });
   };
