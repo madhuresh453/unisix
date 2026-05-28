@@ -35,7 +35,12 @@ export const env = {
   cloudinaryFolder: process.env.CLOUDINARY_FOLDER || "uni6ctf",
   submissionCooldownMs: Number(process.env.SUBMISSION_COOLDOWN_MS || 3000),
   authFailureWindowMs: Number(process.env.AUTH_FAILURE_WINDOW_MS || 15 * 60 * 1000),
-  authFailureLimit: Number(process.env.AUTH_FAILURE_LIMIT || 15)
+  authFailureLimit: Number(process.env.AUTH_FAILURE_LIMIT || 15),
+  paymentProvider: process.env.PAYMENT_PROVIDER || "manual",
+  stripeSecretKey: process.env.STRIPE_SECRET_KEY || "",
+  stripeWebhookSecret: process.env.STRIPE_WEBHOOK_SECRET || "",
+  razorpayKeyId: process.env.RAZORPAY_KEY_ID || "",
+  razorpayKeySecret: process.env.RAZORPAY_KEY_SECRET || ""
 };
 
 export function assertProductionSecrets() {

@@ -2,38 +2,22 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  Activity,
-  Award,
-  BadgeCheck,
-  CircuitBoard,
-  Flag,
-  LayoutDashboard,
-  Settings,
-  Users
-} from "lucide-react";
+import { Lock } from "lucide-react";
 import { cn } from "@/utils/helpers";
-
-const links = [
-  { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
-  { label: "Activity", href: "/dashboard/activity", icon: Activity },
-  { label: "Submissions", href: "/dashboard/submissions", icon: Flag },
-  { label: "Challenges", href: "/dashboard/challenges", icon: CircuitBoard },
-  { label: "Hints", href: "/dashboard/hints", icon: BadgeCheck },
-  { label: "Badges", href: "/dashboard/badges", icon: Award },
-  { label: "Teams", href: "/dashboard/teams", icon: Users },
-  { label: "Settings", href: "/dashboard/settings", icon: Settings }
-];
+import { getDashboardNavigation, isNavItemActive } from "@/config/navigationConfig";
+import { useAuth } from "@/hooks/useAuth";
 
 export function Sidebar() {
   const pathname = usePathname();
+  const { user } = useAuth();
+  const links = getDashboardNavigation({ user });
 
   return (
     <aside className="cyber-panel h-fit rounded-xl p-3 lg:sticky lg:top-24">
       <nav className="grid gap-1">
         {links.map((link) => {
           const Icon = link.icon;
-          const active = pathname === link.href;
+          const active = isNavItemActive(pathname, link.href);
           return (
             <Link
               key={link.href}
@@ -45,6 +29,7 @@ export function Sidebar() {
             >
               <Icon className="h-4 w-4" />
               {link.label}
+              {link.locked ? <Lock className="ml-auto h-3.5 w-3.5 text-cyber-red/80" /> : null}
             </Link>
           );
         })}

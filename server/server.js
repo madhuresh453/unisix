@@ -22,6 +22,7 @@ import { startEmailJob } from "./src/jobs/emailJob.js";
 import { startLeaderboardJob } from "./src/jobs/leaderboardJob.js";
 import { registerNotificationSocket } from "./src/sockets/notifications.js";
 import { registerScoreboardSocket } from "./src/sockets/scoreboard.js";
+import { registerLearningSocket } from "./src/sockets/learning.js";
 
 console.log("Checking production secrets...");
 assertProductionSecrets();
@@ -37,6 +38,7 @@ setIO(io);
 io.on("connection", (socket) => {
   registerScoreboardSocket(io, socket);
   registerNotificationSocket(io, socket);
+  registerLearningSocket(io, socket);
 });
 
 async function bootstrap() {

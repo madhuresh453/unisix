@@ -10,6 +10,13 @@ export const rolePermissions = {
     "media:manage",
     "ctfs:manage",
     "challenges:manage",
+    "labs:manage",
+    "rooms:manage",
+    "courses:manage",
+    "workshops:manage",
+    "certificates:manage",
+    "subscriptions:manage",
+    "payments:manage",
     "admin:access"
   ],
   captain: [],
