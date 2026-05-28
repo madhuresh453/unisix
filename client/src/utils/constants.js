@@ -50,7 +50,7 @@ export const events = [
 
     title: "ctf4-cyber-challenge",
 
-    status: "UPCOMING, LIVE ON 15 MAY",
+    status: "LIVE",
 
     difficulty: "Hard",
 
